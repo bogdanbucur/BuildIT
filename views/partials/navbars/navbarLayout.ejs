@@ -1,0 +1,69 @@
+<div id="navbar-full" style="margin-bottom: 50px;">
+    <div id="navbar">
+        <!--
+    navbar-default can be changed with navbar-ct-blue navbar-ct-azzure navbar-ct-red navbar-ct-green navbar-ct-orange
+    -->
+        <nav class="navbar navbar-ct-azzure" role="navigation">
+
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">BuildIT</a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="/build">Configure</a></li>
+                        <li><a href="/benchmarks">Benchmarks</a></li>
+                        <li><a href="/forum">Forum</a></li>
+                    </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <% if (user.data.firstName && user.data.lastName) { %>
+                            <a href="" class="dropdown-toggle" data-toggle="dropdown"><%= user.data.firstName %> <%= user.data.lastName %><b class="caret"></b></a>
+                            <% } else if (user.facebook.name) { %>
+                            <a href="" class="dropdown-toggle" data-toggle="dropdown"><%= user.facebook.name %><b class="caret"></b></a>
+                            <% } else if (user.github.name) { %>
+                            <a href="" class="dropdown-toggle" data-toggle="dropdown"><%= user.github.name %><b class="caret"></b></a>
+                            <% } else if (user.google.firstName && user.google.lastName) { %>
+                            <a href="" class="dropdown-toggle" data-toggle="dropdown"><%= user.google.firstName %> <%= user.google.lastName %> <b class="caret"></b></a>
+                            <% } else if (user.instagram.firstName && user.instagram.lastName) { %>
+                            <a href="" class="dropdown-toggle" data-toggle="dropdown"><%= user.instagram.firstName %> <%= user.instagram.lastName %> <b class="caret"></b></a>
+                            <% } else { %>
+                            <a href="" class="dropdown-toggle" data-toggle="dropdown"><%= user.local.username %><b class="caret"></b></a>
+                            <% } %>
+                            <ul class="dropdown-menu">
+                                <li style="margin-bottom: -6%">
+                                    <a href="/userProfile" class="text-center">Account Details</a>
+                                </li>
+                                <li class="divider"></li>
+                                <% if (user.data.userType === 'god') { %>
+                                <li style="margin-bottom: -6%; margin-top: -5%">
+                                    <a href="/userData" class="text-center">Modify User</a>
+                                </li>
+                                <li class="divider"></li>
+                                <% } else if (user.data.userType === 'demigod') { %>
+                                <li style="margin-bottom: -6%; margin-top: -5%">
+                                    <a href="/userData" class="text-center">Modify User</a>
+                                </li>
+                                <li class="divider"></li>
+                                <% } %>
+                                <li style="margin-top: -6%">
+                                    <a href="/logout" class="text-center">Sign out</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+    </div>
+
+</div>

@@ -1,0 +1,39 @@
+<%- contentFor('body') %>
+
+<link rel="stylesheet" type="text/css" href="/stylesheets/specific/hipster_cards.css">
+<link rel="stylesheet" type="text/css" href="/stylesheets/specific/charts.css">
+
+<div class="main" style="margin-top: 100px;">
+
+    <div class="wrapper">       
+        <div class="container">
+            <%news.forEach(function (item) {%>
+                <div class="masonry-container">
+                    <div class="card-box col-md-4 col-sm-6">
+                        <div class="card">
+                            <div class="header">
+                                <img class="img-responsive" src="<%= item.image %>" style="width: 100%; height: 100%; margin-top: -10px;">
+                                <div class="filter"></div>
+
+                                <div class="actions">
+                                    <a href="<%= item.link %>">
+                                        <button class="btn btn-round btn-fill btn-neutral btn-modern">
+                                            Read Article
+                                        </button>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="content">
+                                <h6 class="category">News</h6>
+                                <h4 class="title"><a href="#"><%= item.title %></a></h4>
+                                <p class="description"><%= item.description %></p>
+                            </div>
+                        </div> <!-- end card -->
+                    </div>
+                </div>
+            <%})%>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,39 @@
+<div class="modal fade" id="userType<%= item._id %>" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/updateUserType?id=<%= item._id %>" method="post">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <% if (item.data.firstName && item.data.lastName) { %>
+                    <h4 class="modal-title text-center"><%= item.data.firstName %> <%= item.data.lastName %></h4>
+                    <% } else if (item.facebook.name) { %>
+                    <h4 class="modal-title text-center"><%= item.facebook.name %></h4>
+                    <% } else if (item.google.firstName && item.google.lastName) { %>
+                    <h4 class="modal-title text-center"><%= item.google.firstName %> <%= item.google.lastName %></h4>
+                    <% } else if (item.instagram.firstName && item.instagram.lastName) { %>
+                    <h4 class="modal-title text-center"><%= item.instagram.firstName %> <%= item.instagram.lastName %></h4>
+                    <% } else if (item.github.name) { %>
+                    <h4 class="modal-title text-center"><%= item.github.name %></h4>
+                    <% } else { %>
+                    <h4 class="modal-title text-center"><%= item.local.username %></h4>
+                    <% } %>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Select new type</label>
+                        <select class="form-control" id="typeUser" name="typeUser">
+                            <option disabled selected>Select</option>
+                            <% userTypes[0].types.forEach((type) => { %>
+                            <option><%= type %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info pull-left">Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

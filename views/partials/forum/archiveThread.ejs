@@ -1,0 +1,29 @@
+<div class="modal fade" id="archiveThread" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/archiveThread" method="post">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title text-center">Send thread to Archives</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Select new type</label>
+                        <select class="form-control" id="thread" name="thread">
+                            <option disabled selected>Select</option>
+                            <% threads.forEach((item) => {
+                            if (item.archived === false) { %>
+                            <option value="<%= item._id %>"><%= item.title %></option>
+                            <% }
+                            }) %>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info pull-left">Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

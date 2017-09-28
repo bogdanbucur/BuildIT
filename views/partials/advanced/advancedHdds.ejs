@@ -1,0 +1,69 @@
+<div class="col-sm-12">
+    <input id="filterHdd" type="text" class="form-control pull-right" placeholder="Type here..." style="width: 25%">
+    <table class="table table-hover table-responsive">
+        <thead>
+        <tr>
+            <th style="width: 10%"></th>
+            <th style="width: 15%">Name</th>
+            <th style="width: 10%">Capacity</th>
+            <th style="width: 10%">Speed</th>
+            <th style="width: 10%">Interface</th>
+            <th style="width: 10%">Cache</th>
+            <th style="width: 10%">Transfer Rate</th>
+            <th style="width: 10%">Rating</th>
+            <th style="width: 10%">Price</th>
+        </tr>
+        </thead>
+        <tbody class="searchable6" id="hddTable">
+        <%hddArray.forEach(function(item) {%>
+        <tr>
+            <th scope="row" style="width: 10%">
+                <img src="<%= item.image0 %>" alt="" height="64" width="64">
+            </th>
+            <td style="width: 15%">
+                <%= item.name %>
+            </td>
+            <td style="width: 10%">
+                <%= item.capacity %>
+            </td>
+            <td style="width: 10%">
+                <%= item.speed %>
+            </td>
+            <td style="width: 10%">
+                <%= item.interface %>
+            </td>
+            <td style="width: 10%">
+                <%= item.cache %>
+            </td>
+            <td style="width: 10%">
+                <%= item.transferRate %>
+            </td>
+            <td style="width: 10%">
+                <%= item.rating %> <li class="fa fa-star" style="color: gold"></li>
+            </td>
+            <td style="width: 10%">
+                <%= item.price %>
+            </td>
+            <td style="width: 5%">
+
+                <% include ../componentDetails/hardDrivesDetails.ejs %>
+
+            </td>
+            <td style="width: 5%">
+                <div class="choice" data-toggle="wizard-checkbox">
+                    <input class="messageCheckbox" type="checkbox" title="Add me" value="<%= item._id %>^<%= item.colType %>">
+                    <div class="icon">
+                        <i class="fa fa-check-square-o"></i>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <%})%>
+        </tbody>
+    </table>
+    <table class="footer">
+        <div class="text-center">
+            <ul class="pagination pagination-lg pager" id="hddPager"></ul>
+        </div>
+    </table>
+</div>

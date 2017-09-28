@@ -1,0 +1,584 @@
+<% if (board) { %>
+<div class="tab-pane" id="boards">
+    <div class="col-sm-12">
+        <input id="filterBoards" type="text" class="form-control pull-right" placeholder="Type here..." style="width: 25%">
+        <table class="table table-hover table-responsive">
+            <thead>
+            <tr>
+                <th style="width: 10%"></th>
+                <th style="width: 15%">Name</th>
+                <th style="width: 10%">CPU Socket</th>
+                <th style="width: 10%">Chipset</th>
+                <th style="width: 10%">Memory Type</th>
+                <th style="width: 10%">Memory Capacity</th>
+                <th style="width: 10%">LAN</th>
+                <th style="width: 10%">Rating</th>
+                <th style="width: 10%">Price</th>
+            </tr>
+            </thead>
+            <tbody class="searchable1" id="boardsTable">
+            <%board.forEach(function(item) {%>
+            <tr>
+                <th scope="row" style="width: 10%;">
+                    <img src="<%= item.image0 %>" alt="" height="64" width="64">
+                </th>
+                <td style="width: 15%;">
+                    <%= item.name %>
+                </td>
+                <td style="width: 10%;">
+                    <%= item.cpuSocket %>
+                </td>
+                <td style="width: 10%;">
+                    <%= item.cpuChipset %>
+                </td>
+                <td style="width: 10%;">
+                    <%= item.memoryType %>
+                </td>
+                <td style="width: 10%;">
+                    <%= item.memoryMaxCapacity %>
+                </td>
+                <td style="width: 10%;">
+                    <%= item.connectivityLAN %>
+                </td>
+                <td style="width: 10%;">
+                    <%= item.rating %> <li class="fa fa-star" style="color: gold"></li>
+                </td>
+                <td style="width: 10%;">
+                    <%= item.price %>
+                </td>
+                <td style="width: 5%">
+
+                    <% include componentDetails/motherboardDetails.ejs %>
+
+                </td>
+                <td style="width: 5%">
+                    <div class="choice" data-toggle="wizard-checkbox">
+                        <input class="messageCheckbox" type="checkbox" title="Add me" value="<%= item._id %>^<%= item.colType %>">
+                        <div class="icon">
+                            <i class="fa fa-check-square-o"></i>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <%})%>
+            </tbody>
+        </table>
+        <table class="footer">
+            <div class="text-center">
+                <ul class="pagination pagination-lg pager" id="boardsPager"></ul>
+            </div>
+        </table>
+    </div>
+</div>
+<% } %>
+<% if (cpu) { %>
+<div class="tab-pane" id="cpu">
+    <div class="col-sm-12">
+        <input id="filterCpu" type="text" class="form-control pull-right" placeholder="Type here..." style="width: 25%">
+        <table class="table table-hover table-responsive">
+            <thead>
+            <tr>
+                <th style="width: 10%"></th>
+                <th style="width: 15%">Name</th>
+                <th style="width: 10%">Cache</th>
+                <th style="width: 10%">Socket</th>
+                <th style="width: 10%">Frequency</th>
+                <th style="width: 10%">Turbo Boost</th>
+                <th style="width: 10%">No. Cores</th>
+                <th style="width: 10%">Rating</th>
+                <th style="width: 10%">Price</th>
+            </tr>
+            </thead>
+            <tbody class="searchable2" id="cpuTable">
+            <%cpu.forEach(function(item) {%>
+            <tr>
+                <th scope="row" style="width: 10%">
+                    <img src="<%= item.image0 %>" alt="" height="64" width="64">
+                </th>
+                <td style="width: 15%">
+                    <%= item.name %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.cache %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.socket %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.frequency %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.turboBoost %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.cores %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.rating %> <li class="fa fa-star" style="color: gold"></li>
+                </td>
+                <td style="width: 10%">
+                    <%= item.price %>
+                </td>
+                <td style="width: 5%">
+
+                    <% include componentDetails/processorDetails.ejs %>
+
+                </td>
+                <td style="width: 5%">
+                    <div class="choice" data-toggle="wizard-checkbox">
+                        <input class="messageCheckbox" type="checkbox" title="Add me" value="<%= item._id %>^<%= item.colType %>">
+                        <div class="icon">
+                            <i class="fa fa-check-square-o"></i>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <%})%>
+            </tbody>
+        </table>
+        <table class="footer">
+            <div class="text-center">
+                <ul class="pagination pagination-lg pager" id="cpuPager"></ul>
+            </div>
+        </table>
+    </div>
+</div>
+<% } %>
+<% if (gpu) { %>
+<div class="tab-pane" id="gpu">
+    <div class="col-sm-12">
+        <input id="filterGpu" type="text" class="form-control pull-right" placeholder="Type here..." style="width: 25%">
+        <table class="table table-hover table-responsive">
+            <thead>
+            <tr>
+                <th style="width: 10%"></th>
+                <th style="width: 15%">Name</th>
+                <th style="width: 10%">Type</th>
+                <th style="width: 10%">SLI Support</th>
+                <th style="width: 10%">Memory Capacity</th>
+                <th style="width: 10%">Memory BUS</th>
+                <th style="width: 10%">Cooling Type</th>
+                <th style="width: 10%">Rating</th>
+                <th style="width: 10%">Price</th>
+            </tr>
+            </thead>
+            <tbody class="searchable3" id="gpuTable">
+            <%gpu.forEach(function(item) {%>
+            <tr>
+                <th scope="row" style="width: 10%">
+                    <img src="<%= item.image0 %>" alt="" height="64" width="64">
+                </th>
+                <td style="width: 15%">
+                    <%= item.name %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.generalType %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.generalSLI %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.memoryCapacity %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.memoryBUS %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.coolingType %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.rating %> <li class="fa fa-star" style="color: gold"></li>
+                </td>
+                <td style="width: 10%">
+                    <%= item.price %>
+                </td>
+                <td style="width: 5%">
+
+                    <% include componentDetails/graphicsBoardDetails.ejs %>
+
+                </td>
+                <td style="width: 5%">
+                    <div class="choice" data-toggle="wizard-checkbox">
+                        <input class="messageCheckbox" type="checkbox" title="Add me" value="<%= item._id %>^<%= item.colType %>">
+                        <div class="icon">
+                            <i class="fa fa-check-square-o"></i>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <%})%>
+            </tbody>
+        </table>
+        <table class="footer">
+            <div class="text-center">
+                <ul class="pagination pagination-lg pager" id="gpuPager"></ul>
+            </div>
+        </table>
+    </div>
+</div>
+<% } %>
+<% if (ram) { %>
+<div class="tab-pane" id="ram">
+    <div class="col-sm-12">
+        <input id="filterRam" type="text" class="form-control pull-right" placeholder="Type here..." style="width: 25%">
+        <table class="table table-hover table-responsive">
+            <thead>
+            <tr>
+                <th style="width: 10%"></th>
+                <th style="width: 15%">Name</th>
+                <th style="width: 10%">Type</th>
+                <th style="width: 10%">Capacity</th>
+                <th style="width: 10%">Frequency</th>
+                <th style="width: 10%">Latency</th>
+                <th style="width: 10%">Radiator</th>
+                <th style="width: 10%">Rating</th>
+                <th style="width: 10%">Price</th>
+            </tr>
+            </thead>
+            <tbody class="searchable4" id="ramTable">
+            <%ram.forEach(function(item) {%>
+            <tr>
+                <th scope="row" style="width: 10%">
+                    <img src="<%= item.image0 %>" alt="" height="64" width="64">
+                </th>
+                <td style="width: 15%">
+                    <%= item.name %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.generalType %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.generalCapacity %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.generalFrequency %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.otherLatency %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.otherRadiator %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.rating %> <li class="fa fa-star" style="color: gold"></li>
+                </td>
+                <td style="width: 10%">
+                    <%= item.price %>
+                </td>
+                <td style="width: 5%">
+
+                    <% include componentDetails/ramDetails.ejs %>
+
+                </td>
+                <td style="width: 5%">
+                    <div class="choice" data-toggle="wizard-checkbox">
+                        <input class="messageCheckbox" type="checkbox" title="Add me" value="<%= item._id %>^<%= item.colType %>">
+                        <div class="icon">
+                            <i class="fa fa-check-square-o"></i>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <%})%>
+            </tbody>
+        </table>
+        <table class="footer">
+            <div class="text-center">
+                <ul class="pagination pagination-lg pager" id="ramPager"></ul>
+            </div>
+        </table>
+    </div>
+</div>
+<% } %>
+<% if (ssd) { %>
+<div class="tab-pane" id="ssd">
+    <div class="col-sm-12">
+        <input id="filterSsd" type="text" class="form-control pull-right" placeholder="Type here..." style="width: 25%">
+        <table class="table table-hover table-responsive">
+            <thead>
+            <tr>
+                <th style="width: 10%"></th>
+                <th style="width: 15%">Name</th>
+                <th style="width: 10%">Form Factor</th>
+                <th style="width: 10%">Capacity</th>
+                <th style="width: 10%">Read</th>
+                <th style="width: 10%">Write</th>
+                <th style="width: 10%">Type</th>
+                <th style="width: 10%">Rating</th>
+                <th style="width: 10%">Price</th>
+            </tr>
+            </thead>
+            <tbody class="searchable5" id="ssdTable">
+            <%ssd.forEach(function(item) {%>
+            <tr>
+                <th scope="row" style="width: 10%">
+                    <img src="<%= item.image0 %>" alt="" height="64" width="64">
+                </th>
+                <td style="width: 15%">
+                    <%= item.name %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.formFactor %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.capacity %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.readTransferRate %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.writeTransferRate %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.type %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.rating %> <li class="fa fa-star" style="color: gold"></li>
+                </td>
+                <td style="width: 10%">
+                    <%= item.price %>
+                </td>
+                <td style="width: 5%">
+
+                    <% include componentDetails/ssdDetails.ejs %>
+
+                </td>
+                <td style="width: 5%">
+                    <div class="choice" data-toggle="wizard-checkbox">
+                        <input class="messageCheckbox" type="checkbox" title="Add me" value="<%= item._id %>^<%= item.colType %>">
+                        <div class="icon">
+                            <i class="fa fa-check-square-o"></i>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <%})%>
+            </tbody>
+        </table>
+        <table class="footer">
+            <div class="text-center">
+                <ul class="pagination pagination-lg pager" id="ssdPager"></ul>
+            </div>
+        </table>
+    </div>
+</div>
+<% } %>
+<% if (hdd) { %>
+<div class="tab-pane" id="hdd">
+    <div class="col-sm-12">
+        <input id="filterHdd" type="text" class="form-control pull-right" placeholder="Type here..." style="width: 25%">
+        <table class="table table-hover table-responsive">
+            <thead>
+            <tr>
+                <th style="width: 10%"></th>
+                <th style="width: 15%">Name</th>
+                <th style="width: 10%">Capacity</th>
+                <th style="width: 10%">Speed</th>
+                <th style="width: 10%">Interface</th>
+                <th style="width: 10%">Cache</th>
+                <th style="width: 10%">Transfer Rate</th>
+                <th style="width: 10%">Rating</th>
+                <th style="width: 10%">Price</th>
+            </tr>
+            </thead>
+            <tbody class="searchable6" id="hddTable">
+            <%hdd.forEach(function(item) {%>
+            <tr>
+                <th scope="row" style="width: 10%">
+                    <img src="<%= item.image0 %>" alt="" height="64" width="64">
+                </th>
+                <td style="width: 15%">
+                    <%= item.name %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.capacity %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.speed %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.interface %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.cache %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.transferRate %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.rating %> <li class="fa fa-star" style="color: gold"></li>
+                </td>
+                <td style="width: 10%">
+                    <%= item.price %>
+                </td>
+                <td style="width: 5%">
+
+                    <% include componentDetails/hardDrivesDetails.ejs %>
+
+                </td>
+                <td style="width: 5%">
+                    <div class="choice" data-toggle="wizard-checkbox">
+                        <input class="messageCheckbox" type="checkbox" title="Add me" value="<%= item._id %>^<%= item.colType %>">
+                        <div class="icon">
+                            <i class="fa fa-check-square-o"></i>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <%})%>
+            </tbody>
+        </table>
+        <table class="footer">
+            <div class="text-center">
+                <ul class="pagination pagination-lg pager" id="hddPager"></ul>
+            </div>
+        </table>
+    </div>
+</div>
+<% } %>
+<% if (powerSupply) { %>
+<div class="tab-pane" id="powerSupply">
+    <div class="col-sm-12">
+        <input id="filterPowerSupply" type="text" class="form-control pull-right" placeholder="Type here..." style="width: 25%">
+        <table class="table table-hover table-responsive">
+            <thead>
+            <tr>
+                <th style="width: 10%"></th>
+                <th style="width: 15%">Name</th>
+                <th style="width: 10%">Power</th>
+                <th style="width: 10%">Power Socket</th>
+                <th style="width: 10%">Modular Source</th>
+                <th style="width: 10%">Format</th>
+                <th style="width: 10%">Size</th>
+                <th style="width: 10%">Rating</th>
+                <th style="width: 10%">Price</th>
+            </tr>
+            </thead>
+            <tbody class="searchable7" id="powerSupplyTable">
+            <%powerSupply.forEach(function(item) {%>
+            <tr>
+                <th scope="row" style="width: 10%">
+                    <img src="<%= item.image0 %>" alt="" height="64" width="64">
+                </th>
+                <td style="width: 15%">
+                    <%= item.name %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.power %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.powerSocket %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.modularSource %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.format %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.size %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.rating %> <li class="fa fa-star" style="color: gold;"></li>
+                </td>
+                <td style="width: 10%">
+                    <%= item.price %>
+                </td>
+                <td style="width: 5%">
+
+                    <% include componentDetails/powerSupplyDetails.ejs %>
+
+                </td>
+                <td style="width: 5%">
+                    <div class="choice" data-toggle="wizard-checkbox">
+                        <input class="messageCheckbox" type="checkbox" title="Add me" value="<%= item._id %>^<%= item.colType %>">
+                        <div class="icon">
+                            <i class="fa fa-check-square-o"></i>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <%})%>
+            </tbody>
+        </table>
+        <table class="footer">
+            <div class="text-center">
+                <ul class="pagination pagination-lg pager" id="powerSupplyPager"></ul>
+            </div>
+        </table>
+    </div>
+</div>
+<% } %>
+<% if (pcCase) { %>
+<div class="tab-pane" id="cases">
+    <div class="col-sm-12">
+        <input id="filterCases" type="text" class="form-control pull-right" placeholder="Type here..." style="width: 25%">
+        <table class="table table-hover table-responsive">
+            <thead>
+            <tr>
+                <th style="width: 10%"></th>
+                <th style="width: 15%">Name</th>
+                <th style="width: 10%">Type</th>
+                <th style="width: 10%">Power Supply</th>
+                <th style="width: 10%">Motherboard</th>
+                <th style="width: 10%">Included Fans</th>
+                <th style="width: 10%">Size</th>
+                <th style="width: 10%">Rating</th>
+                <th style="width: 10%">Price</th>
+            </tr>
+            </thead>
+            <tbody class="searchable8" id="casesTable">
+            <%pcCase.forEach(function(item) {%>
+            <tr>
+                <th scope="row" style="width: 10%">
+                    <img src="<%= item.image0 %>" alt="" height="64" width="64">
+                </th>
+                <td style="width: 15%">
+                    <%= item.name %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.type %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.powerSupply %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.motherboardCompatibility %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.includedFans %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.size %>
+                </td>
+                <td style="width: 10%">
+                    <%= item.rating %> <li class="fa fa-star" style="color: gold"></li>
+                </td>
+                <td style="width: 10%">
+                    <%= item.price %>
+                </td>
+                <td style="width: 5%">
+
+                    <% include componentDetails/computerCaseDetails.ejs %>
+
+                </td>
+                <td style="width: 5%">
+                    <div class="choice" data-toggle="wizard-checkbox">
+                        <input class="messageCheckbox" type="checkbox" title="Add me" value="<%= item._id %>^<%= item.colType %>">
+                        <div class="icon">
+                            <i class="fa fa-check-square-o"></i>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <%})%>
+            </tbody>
+        </table>
+        <table class="footer">
+            <div class="text-center">
+                <ul class="pagination pagination-lg pager" id="casesPager"></ul>
+            </div>
+        </table>
+    </div>
+</div>
+<% } %>

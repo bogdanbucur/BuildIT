@@ -1,0 +1,112 @@
+<%- contentFor('body') %>
+
+<link rel="stylesheet" href="/stylesheets/specific/material-bootstrap-wizard.css">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons"/>
+
+
+<div class="main container">
+    <div class="image-container set-full-height">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <!--      Wizard container        -->
+                    <div class="wizard-container">
+                        <div class="card wizard-card" data-color="purple" id="wizard">
+                            <div class="wizard-navigation">
+                                <ul class="nav nav-pills">
+                                    <li style="left: 8px; top: -10px">
+                                        <a href="#configs" data-toggle="tab">Personal Configurations</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="tab-content">
+                                <div class="tab-pane" id="configs">
+                                    <div class="col-sm-12" style="margin-top: 20px">
+                                        <h4 class="info-text"> Hello <%= user.data.firstName %> <%= user.data.lastName %>, here you can find every configuration you made with us.</h4>
+                                    </div>
+                                    <div class="col-sm-12" style="margin-top: -50px">
+                                        <div class="col-sm-6">
+                                            <input id="filterBoards" type="text" class="form-control pull-left" placeholder="Type here..." style="width: 25%">
+                                            <table class="table table-hover table-responsive">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 10%"></th>
+                                                        <th style="width: 15%">Configurations</th>
+                                                        <th style="width: 15%"></th>
+                                                        <th style="width: 15%"></th>
+                                                        <th style="width: 15%"></th>
+                                                        <th style="width: 15%"></th>
+                                                        <th style="width: 15%"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="searchable" id="configTable">
+                                                <%buildArray.forEach(function(item) {%>
+                                                    <tr>
+                                                        <th scope="row" style="width: 10%;">
+                                                            <%= buildArray.indexOf(item) + 1 %>
+                                                        </th>
+                                                        <td style="width: 15%;">
+                                                            <a href="/configuration-details?id=<%= item.id %>" style="color: #1D62F0"><%= item.name %></a>
+                                                        </td>
+                                                        <td style="width: 15%;"></td>
+                                                        <td style="width: 15%;"></td>
+                                                        <td style="width: 15%;"></td>
+                                                        <td style="width: 15%;"></td>
+                                                        <td style="width: 15%;"></td>
+                                                        <td style="width: 15%;"></td>
+                                                        </td>
+                                                    </tr>
+                                                <%})%>
+                                                </tbody>
+                                            </table>
+
+                                            <table class="footer">
+                                                <div class="text-center">
+                                                    <ul class="pagination pagination-lg pager" id="configPager"></ul>
+                                                </div>
+                                            </table>
+                                        </div>
+
+                                        <!--<table class="footer">-->
+                                            <!--<div class="text-center">-->
+                                                <!--<ul class="pagination pagination-lg pager" id="boardsPager"></ul>-->
+                                            <!--</div>-->
+                                        <!--</table>-->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="wizard-footer">
+                                <div class="pull-right">
+                                    <input type='button' class='btn btn-next btn-fill btn-primary btn-wd' name='next' value='Next' />
+                                    <input type='button' class='btn btn-finish btn-fill btn-primary btn-wd' id="finish" value='Finish' />
+                                </div>
+                                <div class="pull-left">
+                                    <input type='button' class='btn btn-previous btn-fill btn-default btn-wd' name='previous' value='Previous' />
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- wizard container -->
+                </div>
+            </div>
+            <!-- row -->
+        </div>
+    </div>
+</div>
+<%- contentFor('additionalScript') %>
+<script type="text/javascript" src='/javascripts/specific/material-bootstrap-wizard.js'></script>
+<script type="text/javascript" src="javascripts/specific/advancedBuild/boardsTable.js"></script>
+<script>
+    $(document).ready(function () {
+        (function ($) {
+            $('#filterBoards').keyup(function () {
+                let rex = new RegExp($(this).val(), 'i');
+                $('.searchable tr').hide();
+                $('.searchable tr').filter(function () {
+                    return rex.test($(this).text());
+                }).show();
+            });
+        }(jQuery));
+    });
+</script>

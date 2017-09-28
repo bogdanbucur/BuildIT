@@ -1,0 +1,28 @@
+<div class="modal fade" id="reply<%= item._id %>" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title text-center">Reply</h4>
+            </div>
+            <form action="/reply?id=<%= user._id %>&commentID=<%= item._id %>&topicID=<%= topic._id %>" method="post">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="form-group label-floating">
+                                    <label for="description" class="control-label"> Reply</label>
+                                    <textarea id="textReply" name="textReply" class="form-control" rows="5"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info pull-left">Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

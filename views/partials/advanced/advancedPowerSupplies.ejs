@@ -1,0 +1,69 @@
+<div class="col-sm-12">
+    <input id="filterPowerSupply" type="text" class="form-control pull-right" placeholder="Type here..." style="width: 25%">
+    <table class="table table-hover table-responsive">
+        <thead>
+        <tr>
+            <th style="width: 10%"></th>
+            <th style="width: 15%">Name</th>
+            <th style="width: 10%">Power</th>
+            <th style="width: 10%">Power Socket</th>
+            <th style="width: 10%">Modular Source</th>
+            <th style="width: 10%">Format</th>
+            <th style="width: 10%">Size</th>
+            <th style="width: 10%">Rating</th>
+            <th style="width: 10%">Price</th>
+        </tr>
+        </thead>
+        <tbody class="searchable7" id="powerSupplyTable">
+        <%powerSupplyArray.forEach(function(item) {%>
+        <tr>
+            <th scope="row" style="width: 10%">
+                <img src="<%= item.image0 %>" alt="" height="64" width="64">
+            </th>
+            <td style="width: 15%">
+                <%= item.name %>
+            </td>
+            <td style="width: 10%">
+                <%= item.power %>
+            </td>
+            <td style="width: 10%">
+                <%= item.powerSocket %>
+            </td>
+            <td style="width: 10%">
+                <%= item.modularSource %>
+            </td>
+            <td style="width: 10%">
+                <%= item.format %>
+            </td>
+            <td style="width: 10%">
+                <%= item.size %>
+            </td>
+            <td style="width: 10%">
+                <%= item.rating %> <li class="fa fa-star" style="color: gold;"></li>
+            </td>
+            <td style="width: 10%">
+                <%= item.price %>
+            </td>
+            <td style="width: 5%">
+
+                <% include ../componentDetails/powerSupplyDetails.ejs %>
+
+            </td>
+            <td style="width: 5%">
+                <div class="choice" data-toggle="wizard-checkbox">
+                    <input class="messageCheckbox" type="checkbox" title="Add me" value="<%= item._id %>^<%= item.colType %>">
+                    <div class="icon">
+                        <i class="fa fa-check-square-o"></i>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <%})%>
+        </tbody>
+    </table>
+    <table class="footer">
+        <div class="text-center">
+            <ul class="pagination pagination-lg pager" id="powerSupplyPager"></ul>
+        </div>
+    </table>
+</div>

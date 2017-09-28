@@ -1,0 +1,154 @@
+<%- contentFor('body') %>
+
+<link rel="stylesheet" type="text/css" href="/stylesheets/specific/material-bootstrap-wizard.css">
+<link rel="stylesheet" type="text/css" href="/stylesheets/specific/carousel.css">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+
+<div class="main container">
+    <div class="image-container set-full-height">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="wizard-container">
+                        <div class="card wizard-card" data-color="purple" id="wizard">
+                            <!--        You can switch " data-color="rose" "  with one of the next bright colors: "blue", "green", "orange", "purple"        -->
+                            <div class="wizard-navigation">
+                                <ul class="nav nav-pills">
+                                    <% if (gpuTab === 1 && boardTab === 0 && cpuTab === 0) { %>
+                                    <li class="active"><a href="#graphicsCard" data-toggle="tab">Graphics Cards</a></li>
+                                    <li><a href="#processors" data-toggle="tab">Processors</a></li>
+                                    <li><a href="#motherboards" data-toggle="tab">Motherboards</a></li>
+                                    <% } else if (gpuTab === 0 && boardTab === 0 && cpuTab === 1) { %>
+                                    <li><a href="#graphicsCard" data-toggle="tab">Graphics Cards</a></li>
+                                    <li class="active"><a href="#processors" data-toggle="tab">Processors</a></li>
+                                    <li><a href="#motherboards" data-toggle="tab">Motherboards</a></li>
+                                    <% } else if (gpuTab === 0 && boardTab === 1 && cpuTab === 0) { %>
+                                    <li><a href="#graphicsCard" data-toggle="tab">Graphics Cards</a></li>
+                                    <li><a href="#processors" data-toggle="tab">Processors</a></li>
+                                    <li class="active"><a href="#motherboards" data-toggle="tab">Motherboards</a></li>
+                                    <% } else { %>
+                                    <li><a href="#graphicsCard" data-toggle="tab">Graphics Cards</a></li>
+                                    <li><a href="#processors" data-toggle="tab">Processors</a></li>
+                                    <li><a href="#motherboards" data-toggle="tab">Motherboards</a></li>
+                                    <% } %>
+                                </ul>
+                            </div>
+
+                            <div class="tab-content">
+                                <% if (gpuTab === 1 && boardTab === 0 && cpuTab === 0) { %>
+                                <div class="tab-pane fade in active" id="graphicsCard">
+                                    <% include ../partials/benchmark/graphicsCards.ejs %>
+                                </div>
+                                <div class="tab-pane fade" id="processors">
+                                    <% include ../partials/benchmark/processors.ejs %>
+                                </div>
+                                <div class="tab-pane fade" id="motherboards">
+                                    <% include ../partials/benchmark/motherboards.ejs %>
+                                </div>
+                                <% } else if (gpuTab === 0 && boardTab === 0 && cpuTab === 1) { %>
+                                <div class="tab-pane fade" id="graphicsCard">
+                                    <% include ../partials/benchmark/graphicsCards.ejs %>
+                                </div>
+                                <div class="tab-pane fade in active" id="processors">
+                                    <% include ../partials/benchmark/processors.ejs %>
+                                </div>
+                                <div class="tab-pane fade" id="motherboards">
+                                    <% include ../partials/benchmark/motherboards.ejs %>
+                                </div>
+                                <% } else if (gpuTab === 0 && boardTab === 1 && cpuTab === 0) { %>
+                                <div class="tab-pane fade" id="graphicsCard">
+                                    <% include ../partials/benchmark/graphicsCards.ejs %>
+                                </div>
+                                <div class="tab-pane fade" id="processors">
+                                    <% include ../partials/benchmark/processors.ejs %>
+                                </div>
+                                <div class="tab-pane fade in active" id="motherboards">
+                                    <% include ../partials/benchmark/motherboards.ejs %>
+                                </div>
+                                <% } else { %>
+                                <div class="tab-pane fade" id="graphicsCard">
+                                    <% include ../partials/benchmark/graphicsCards.ejs %>
+                                </div>
+                                <div class="tab-pane fade" id="processors">
+                                    <% include ../partials/benchmark/processors.ejs %>
+                                </div>
+                                <div class="tab-pane fade" id="motherboards">
+                                    <% include ../partials/benchmark/motherboards.ejs 0%>
+                                </div>
+                                <% } %>
+                            </div>
+
+                            <div class="wizard-footer">
+                                <div class="pull-right">
+                                    <input type='button' class='btn btn-next btn-fill btn-primary btn-wd' name='next' value='Next'/>
+                                </div>
+                                <div class="pull-left">
+                                    <input type='button' class='btn btn-previous btn-fill btn-default btn-wd' name='previous' value='Previous'/>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- contentFor('additionalScript') %>
+<script type="text/javascript" src="/javascripts/specific/material-bootstrap-wizard.js"></script>
+
+<script>
+    $('.js-selector').click(function () {
+        clearElems1();
+        $($(this).attr('href')).attr('style', 'display:inline');
+    })
+    $('.selector-js').click(function () {
+        clearElems2();
+        $($(this).attr('href')).attr('style', 'display:inline');
+    })
+
+    function clearElems1() {
+        let elemIds = [
+            '#computerCases1',
+            '#graphicsBoards1',
+            '#hardDrives1',
+            '#motherBoards1',
+            '#powerSupply1',
+            '#processors1',
+            '#ram1',
+            '#ssd1'
+        ];
+
+        for (let i in elemIds) {
+            $(elemIds[i]).attr('style', 'display:none');
+        }
+
+    }
+
+    function clearElems2() {
+        var elemIds = [
+            '#computerCases2',
+            '#graphicsBoards2',
+            '#hardDrives2',
+            '#motherBoards2',
+            '#powerSupply2',
+            '#processors2',
+            '#ram2',
+            '#ssd2'
+        ];
+
+        for (var i in elemIds) {
+            $(elemIds[i]).attr('style', 'display:none');
+        }
+
+    }
+</script>
+
+<script type="text/javascript">
+    $('.js-selector').click(function () {
+        $($(this).attr('href')).attr('style', 'display:inline');
+    })
+</script>

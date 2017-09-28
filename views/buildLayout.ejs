@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<%- include('partials/buildLayoutHead.ejs'); %>
+
+<body>
+    <%- include('partials/navbarBuildLayout.ejs'); %>
+    <%- body %>
+</body>
+
+<!-- Core JS -->
+<script type="text/javascript" src="/javascripts/core/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="/javascripts/core/bootstrap.min.js"></script>
+<script type="text/javascript" src="/javascripts/core/jquery.bootstrap.js"></script>
+
+<!-- Specific JS -->
+<script type="text/javascript" src="/javascripts/specific/login-register.js"></script>
+<script type="text/javascript" src="/javascripts/core/jquery-validate.min.js"></script>
+
+<%- defineContent('additionalScript') %>
+
+</html>

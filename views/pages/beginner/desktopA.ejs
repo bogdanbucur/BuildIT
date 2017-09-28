@@ -1,0 +1,121 @@
+<%- contentFor('body') %>
+
+<link rel="stylesheet" type="text/css" href="/stylesheets/specific/material-bootstrap-wizard.css">
+<link rel="stylesheet" type="text/css" href="/stylesheets/specific/carousel.css">
+
+<div class="main container">
+    <div class="image-container set-full-height">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <div class="wizard-container">
+                        <div class="card wizard-card" data-color="blue" id="wizard">
+                            <form action="/desktopBuild?id=<%= array._id %>^2" method="post">
+                                <!--        You can switch ' data-color="azzure" '  with one of the next bright colors: "blue", "green", "orange", "red"          -->
+
+                                <div class="wizard-header" style="margin-top: -30px">
+                                    <h3>
+                                        <%= array.mainName %> <br>
+                                        <div id="first-slider">
+                                            <div id="carousel-example-generic" class="carousel slide carousel-fade">
+                                                <!-- Indicators -->
+                                                <ol class="carousel-indicators">
+                                                    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                                                    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                                                    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                                                    <li data-target="#carousel-example-generic" data-slide-to="3"></li>
+                                                </ol>
+                                                <!-- Wrapper for slides -->
+                                                <div class="carousel-inner" role="listbox">
+                                                    <!-- Item 1 -->
+                                                    <% if (array.mainImage0 !== null) { %>
+                                                    <div class="item active slide1">
+                                                        <div class="row">
+                                                            <div class="container">
+                                                                <div class="col-md-12">
+                                                                    <img width="300" height="300" data-animation="animated zoomInLeft" src="<%= array.mainImage0 %>">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <% } %>
+                                                    <!-- Item 2 -->
+                                                    <% if (array.mainImage1 !== null) { %>
+                                                    <div class="item slide2">
+                                                        <div class="row">
+                                                            <div class="container">
+                                                                <div class="col-md-12">
+                                                                    <img width="300" height="300" data-animation="animated zoomInLeft" src="<%= array.mainImage1 %>">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <% } %>
+                                                    <!-- Item 3 -->
+                                                    <% if (array.mainImage2 !== null) { %>
+                                                    <div class="item slide3">
+                                                        <div class="row">
+                                                            <div class="container">
+                                                                <div class="col-md-12">
+                                                                    <img width="300" height="300" data-animation="animated zoomInLeft" src="<%= array.mainImage2 %>">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <% } %>
+                                                    <!-- Item 4 -->
+                                                    <% if (array.mainImage3 !== null) { %>
+                                                    <div class="item slide4">
+                                                        <div class="row">
+                                                            <div class="container">
+                                                                <div class="col-md-12">
+                                                                    <img width="300" height="300" data-animation="animated zoomInLeft" src="<%= array.mainImage3 %>">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <% } %>
+                                                    <!-- End Item 4 -->
+
+                                                </div>
+                                                <!-- End Wrapper for slides-->
+                                                <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                                                    <i class="fa fa-angle-left"></i><span class="sr-only">Previous</span>
+                                                </a>
+                                                <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                                                    <i class="fa fa-angle-right"></i><span class="sr-only">Next</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </h3>
+                                </div>
+
+                                <div class="wizard-navigation">
+                                    <ul class="nav nav-pills">
+                                        <li><a href="#specs" data-toggle="tab">Specifications</a></li>
+                                    </ul>
+                                </div>
+
+                                <div class="tab-content" style="margin-top: 5%">
+                                    <% include ../../partials/beginner/desktopABuildSpecs.ejs %>
+                                </div>
+
+                                <div class="wizard-footer">
+                                    <div class="pull-right">
+                                        <input type='submit' class='btn btn-finish btn-fill btn-info btn-wd btn-sm' name='finish' value='Save'/>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- contentFor('additionalScript') %>
+
+<script type="text/javascript" src="/javascripts/specific/material-bootstrap-wizard.js"></script>
+<script type="text/javascript" src="/javascripts/specific/carousel.js"></script>

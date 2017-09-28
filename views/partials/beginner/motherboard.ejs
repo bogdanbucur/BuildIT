@@ -1,0 +1,118 @@
+<h4 class="text-center"><%= board.description %></h4>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th class="text-primary">Processor</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <th scope="row">Socket</th>
+        <td><%= board.cpuSocket %></td>
+    </tr>
+    <tr>
+        <th scope="row">Chipset</th>
+        <td><%= board.cpuChipset %></td>
+    </tr>
+    <tr>
+        <th scope="row">Supported Processors</th>
+        <td><%= board.cpuSupported %></td>
+    </tr>
+    </tbody>
+    <thead>
+    <tr>
+        <th class="text-primary">Memory</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <th scope="row">Type</th>
+        <td><%= board.memoryType %></td>
+    </tr>
+    <tr>
+        <th scope="row">Max Capacity</th>
+        <td><%= board.memoryMaxCapacity %></td>
+    </tr>
+    <tr>
+        <th scope="row">Frequency</th>
+        <td><%= board.memoryFreq %></td>
+    </tr>
+    <tr>
+        <th scope="row">Dual Support</th>
+        <td><%= board.memoryDualSupport %></td>
+    </tr>
+    <tr>
+        <th scope="row">Slots</th>
+        <td><%= board.memorySlots %></td>
+    </tr>
+    </tbody>
+    <thead>
+    <tr>
+        <th class="text-primary">Connectivity</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <th scope="row">PCI</th>
+        <td><%= board.connectivityPCI %></td>
+    </tr>
+    <tr>
+        <th scope="row">Audio</th>
+        <td><%= board.connectivityAudio %></td>
+    </tr>
+    <tr>
+        <th scope="row">LAN</th>
+        <td><%= board.connectivityLAN %></td>
+    </tr>
+    <tr>
+        <th scope="row">SATA</th>
+        <td><%= board.connectivityATA %></td>
+    </tr>
+    <tr>
+        <th scope="row">Transfer Rate</th>
+        <td><%= board.connectivityTransferRate %></td>
+    </tr>
+    <tr>
+        <th scope="row">USB 2.0</th>
+        <td><%= board.connectivityUSB2 %></td>
+    </tr>
+    <tr>
+        <th scope="row">USB 3.0</th>
+        <td><%= board.connectivityUSB3 %></td>
+    </tr>
+    <tr>
+        <th scope="row">Connectivity</th>
+        <td><%= board.connectivityCon %></td>
+    </tr>
+    </tbody>
+    <thead>
+    <tr>
+        <th class="text-primary">Slots</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <th scope="row">PCI x16</th>
+        <td><%= board.slotsPCIx16 %></td>
+    </tr>
+    <tr>
+        <th scope="row">PCI x1</th>
+        <td><%= board.slotsPCIx1 %></td>
+    </tr>
+    </tbody>
+    <thead>
+    <tr>
+        <th class="text-primary">Other</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <th scope="row">Format</th>
+        <td><%= board.otherFormat %></td>
+    </tr>
+    <tr>
+        <th scope="row">Size</th>
+        <td><%= board.otherSize %></td>
+    </tr>
+    </tbody>
+</table>

@@ -1,0 +1,230 @@
+q<%- contentFor('body') %>
+
+<link rel="stylesheet" type="text/css" href="/stylesheets/specific/gsdk-bootstrap-wizard.css">
+<link rel="stylesheet" type="text/css" href="/stylesheets/specific/material-dashboard.css">
+
+<div class="image-container set-full-height" style="background-image: url('assets/img/wizard.jpg')">
+
+  <!--   Big container   -->
+  <div class="container">
+      <% if (url === '/build') { %>
+	  <div class="alert alert-info text-center">
+		  <strong>Info!</strong> You need to set your <strong>Account Type</strong> before you visit the Build section.
+	  </div>
+      <% } %>
+	  <div class="content">
+		  <div class="container-fluid">
+			  <div class="row">
+				  <div class="col-md-8">
+					  <div class="card">
+						  <div class="card-header" data-background-color="blue">
+							  <h4 class="title">Edit Profile</h4>
+							  <p class="category">Complete your profile</p>
+						  </div>
+						  <div class="card-content">
+							  <form action="/editUserData" method="post">
+								  <div class="row">
+									  <div class="col-md-4">
+										  <div class="form-group label-floating">
+											  <label for="username" class="control-label">Username</label>
+											  <% if (user.local.username) { %>
+											  <input id="username" type="text" class="form-control" value="<%= user.local.username %>" style="color: black;" disabled >
+											  <% } else if (user.github.name) { %>
+											  <input id="username" type="text" class="form-control" value="<%= user.github.name %>" style="color: black;" disabled >
+											  <% } else if (user.instagram.username) { %>
+											  <input id="username" type="text" class="form-control" value="<%= user.instagram.username %>" style="color: black;" disabled >
+											  <% } else { %>
+											  <input id="username" type="text" class="form-control" value="" style="color: black;" disabled >
+											  <% } %>
+										  </div>
+									  </div>
+									  <div class="col-md-8">
+										  <div class="form-group label-floating">
+											  <label for="email" class="control-label">Email address</label>
+											  <% if (user.data.email) { %>
+                                              <input id="email" type="email" name="email" class="form-control" value="<%= user.data.email %>" >
+											  <% } else if (user.facebook.email) { %>
+                                              <input id="email" type="email" name="email" class="form-control" value="<%= user.facebook.email %>" >
+											  <% } else if (user.google.email) { %>
+											  <input id="email" type="email" name="email" class="form-control" value="<%= user.google.email %>" >
+											  <% } else { %>
+											  <input id="email" type="email" name="email" class="form-control" value="" >
+											  <% } %>
+										  </div>
+									  </div>
+								  </div>
+
+								  <div class="row">
+									  <div class="col-md-6">
+										  <div class="form-group label-floating">
+											  <label for="firstName" class="control-label">Fist Name</label>
+											  <% if (user.data.firstName) { %>
+                                              <input id="firstName" type="text" name="firstName" class="form-control" value="<%= user.data.firstName %>" >
+											  <% } else if (user.facebook.name) { %>
+                                              <input id="firstName" type="text" name="firstName" class="form-control" value="<%= user.facebook.name.split(' ')[0] %>" >
+											  <% } else if (user.google.firstName) { %>
+											  <input id="firstName" type="text" name="firstName" class="form-control" value="<%= user.google.firstName %>" >
+											  <% } else if (user.instagram.firstName) { %>
+											  <input id="firstName" type="text" name="firstName" class="form-control" value="<%= user.instagram.firstName %>" >
+											  <% } else { %>
+											  <input id="firstName" type="text" name="firstName" class="form-control" value="" >
+											  <% } %>
+										  </div>
+									  </div>
+									  <div class="col-md-6">
+										  <div class="form-group label-floating">
+											  <label for="lastName" class="control-label">Last Name</label>
+											  <% if (user.data.lastName) { %>
+                                              <input id="lastName" type="text" name="lastName" class="form-control" value="<%= user.data.lastName %>" >
+											  <% } else if (user.facebook.name) { %>
+                                              <input id="lastName" type="text" name="lastName" class="form-control" value="<%= user.facebook.name.split(' ')[1] %>" >
+											  <% } else if (user.google.lastName) { %>
+											  <input id="lastName" type="text" name="lastName" class="form-control" value="<%= user.google.lastName %>" >
+											  <% } else if (user.instagram.lastName) { %>
+											  <input id="lastName" type="text" name="lastName" class="form-control" value="<%= user.instagram.lastName %>" >
+											  <% } else { %>
+											  <input id="lastName" type="text" name="lastName" class="form-control" value="" >
+											  <% } %>
+										  </div>
+									  </div>
+								  </div>
+
+								  <div class="row">
+									  <div class="col-sm-5 col-sm-offset-4">
+										  <p class="text-center" style="color: darkgray">Account Type</p>
+										  <div class="cc-selector text-center">
+											  <div class="col-sm-6">
+												  <input id="advanced" type="radio" name="accountType" value="advanced" />
+												  <label class="drinkcard-cc advanced" for="advanced"></label>
+												  <p class="text-center">Advanced</p>
+											  </div>
+											  <div class="col-sm-6">
+												  <input id="beginner" type="radio" name="accountType" value="beginner" />
+												  <label class="drinkcard-cc beginner" for="beginner"></label>
+												  <p class="text-center">Beginner</p>
+											  </div>
+										  </div>
+									  </div>
+								  </div>
+
+								  <button type="submit" class="btn btn-primary pull-right">Update Profile</button>
+								  <div class="clearfix"></div>
+							  </form>
+						  </div>
+					  </div>
+				  </div>
+				  <div class="col-md-4">
+					  <div class="card card-profile">
+						  <div class="card-avatar">
+							  <a href="#pablo">
+								  <% if (user.github.image) { %>
+								  <img class="img" src="<%= user.github.image %>" height="220" width="280" style="background-color: white"/>
+								  <% } else if (user.facebook.image) { %>
+								  <img class="img" src="<%= user.facebook.image %>" height="220" width="280" style="background-color: white"/>
+								  <% } else if (user.google.image) { %>
+								  <img class="img" src="<%= user.google.image %>" height="220" width="280" style="background-color: white"/>
+								  <% } else if (user.instagram.image) { %>
+								  <img class="img" src="<%= user.instagram.image %>" height="220" width="280" style="background-color: white"/>
+								  <% } else if (user.data.accountType === 'advanced') { %>
+								  <img class="img" src="/images/userProfile/advancedUser.ico" height="220" width="280" style="background-color: white"/>
+								  <% } else if (user.data.accountType === 'beginner') { %>
+								  <img class="img" src="/images/userProfile/beginnerUser.ico" height="220" width="280" style="background-color: white"/>
+                                  <% } else if (user.data.accountType === undefined) { %>
+								  <img class="img" src="/images/userProfile/placeholder.jpg" height="220" width="280" style="background-color: white"/>
+                                  <% } %>
+							  </a>
+						  </div>
+
+						  <div class="content">
+							  <h4 class="card-title" style="margin-top: 10%">
+                                  <% if (user.data.firstName && user.data.lastName) { %>
+                                  <%= user.data.firstName %> <%= user.data.lastName %>
+								  <% } else if (user.facebook.name) { %>
+								  <%= user.facebook.name %>
+								  <% } else if (user.github.name) { %>
+								  <%= user.github.name %>
+								  <% } else if (user.google.firstName && user.google.lastName) { %>
+								  <%= user.google.firstName %> <%= user.google.lastName %>
+								  <% } else if (user.instagram.firstName && user.instagram.lastName) { %>
+								  <%= user.instagram.firstName %> <%= user.instagram.lastName %>
+								  <% } else { %>
+								  <%= user.local.username %>
+								  <% } %>
+							  </h4>
+							  <h5 class="card-description">
+								  <% if (user.data.accountType === 'advanced') { %>
+								  Advanced user
+								  <% } else if (user.data.accountType === 'beginner') { %>
+								  Beginner user
+								  <% } else if (user.data.accountType === undefined) { %>
+								  Account Type not setup
+                                  <% } %>
+							  </h5>
+							  <table class="table table-hover table-responsive" style="width: 75%; margin: auto">
+								  <thead>
+								  <tr>
+									  <th class="text-center text-info" style="width: 15%">Configurations</th>
+									  <th></th>
+								  </tr>
+								  </thead>
+								  <tbody class="searchable">
+                                  <% advBuild.forEach(function(item) { %>
+								  <tr>
+									  <td style="width: 50%;">
+										  <a href="/build/configuration-details?id=<%= item.id %>" style="color: #1D62F0"><%= item.name %></a>
+									  </td>
+									  <td style="width: 50%">
+										  <form action="/build/removeBuild?id=<%= item.id %>^<%= user._id %>" method="post" class="pull-right">
+											  <button type="submit" class="btn btn-danger btn-sm" style="margin-top: -2%">
+												  Remove
+											  </button>
+										  </form>
+									  </td>
+								  </tr>
+                                  <% }) %>
+								  <% desktops.forEach(function (item) { %>
+								  <tr>
+									  <td style="width: 50%">
+										  <a href="/desktopDetails?u=<%= item %>" style="color: #1D62F0">Desktop <%= desktops.indexOf(item) + 1 %></a>
+									  </td>
+									  <td style="width: 50%">
+										  <form action="/build/removeDesktop?id=<%= item %>" method="post" class="pull-right">
+											  <button type="submit" class="btn btn-danger btn-sm" style="margin-top: -2%">
+												  Remove
+											  </button>
+										  </form>
+									  </td>
+								  </tr>
+								  <% }) %>
+								  <% laptops.forEach(function (item) { %>
+								  <tr>
+									  <td style="width: 50%">
+										  <a href="/laptopDetails?u=<%= item %>" style="color: #1D62F0">Laptop <%= laptops.indexOf(item) + 1 %></a>
+									  </td>
+									  <td style="width: 50%">
+										  <form action="/build/removeLaptop?id=<%= item %>" method="post" class="pull-right">
+											  <button type="submit" class="btn btn-danger btn-sm" style="margin-top: -2%">
+												  Remove
+											  </button>
+										  </form>
+									  </td>
+								  </tr>
+								  <% }) %>
+								  </tbody>
+							  </table>
+						  </div>
+					  </div>
+				  </div>
+			  </div>
+		  </div>
+	  </div>
+  </div>
+  <!--  big container -->
+
+</div>
+
+<%- contentFor('tooltipScript') %>
+<script type="text/javascript" src="/javascripts/specific/jquery.bootstrap.wizard.js"></script>
+<script type="text/javascript" src="/javascripts/specific/gsdk-bootstrap-wizard.js"></script>
+<script type="text/javascript" src="/javascripts/specific/jquery.validate.min.js"></script>
+<script type="text/javascript" src="/javascripts/specific/material-dashboard.js"></script>

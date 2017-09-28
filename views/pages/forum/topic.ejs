@@ -1,0 +1,146 @@
+<%- contentFor('body') %>
+<% include ../../partials/cssRequires/materialKit.ejs %>
+
+<div class="main container">
+    <div class="image-container set-full-height">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="wizard-container">
+                        <div class="card wizard-card" data-color="purple" id="wizard" style="margin-top: -10%; background: transparent">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card card-nav-tabs" style="background: purple; margin: -1% 0 -1% -1.25%">
+                                            <div class="row">
+                                                <div class="col-sm-8">
+                                                    <h4><span style="margin-left: 5%; color: white"><%= topic.title %></span></h4>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <button type="button" class="btn btn-info btn-sm pull-right" data-toggle="modal"
+                                                            href="javascript:void(0)" data-backdrop="true"
+                                                            data-target="#comment" style="margin-top: 5%">
+                                                        Comment
+                                                    </button>
+                                                    <% include ../../partials/forum/commentModal.ejs %>
+                                                </div>
+                                            </div>
+                                            <h7><span style="margin-left: 5%; color: white"><%= topic.description %></span></h7>
+                                            <% comments.forEach((item) => { %>
+                                            <div class="header" style="background-color: white">
+                                                <div class="nav-tabs-navigation">
+                                                    <div class="nav-tabs-wrapper">
+                                                        <ul class="nav nav-tabs" data-tabs="tabs">
+                                                            <span class="text-primary" style="margin-left: 5%; font-size: 16px">
+                                                                <%= item.text %>
+                                                            </span>
+                                                            <button type="button" class="btn btn-info btn-sm pull-right" data-toggle="modal"
+                                                                    href="javascript:void(0)" data-backdrop="true"
+                                                                    data-target="#reply<%= item._id %>" style="margin-top: 5%">
+                                                                Reply
+                                                            </button>
+                                                            <% include ../../partials/forum/replyModal.ejs %>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <% replies.forEach((reply) => { %>
+                                            <% if (String(reply.ofComment._id) === String(item._id)) { %>
+                                            <div class="header" style="background-color: white; width: 90%; margin-left: 8.5%">
+                                                <div class="nav-tabs-navigation">
+                                                    <div class="nav-tabs-wrapper">
+                                                        <ul class="nav nav-tabs" data-tabs="tabs">
+                                                            <span class="text-primary" style="margin-left: 5%; font-size: 16px">
+                                                                <%= reply.text %>
+                                                            </span>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <% } %>
+                                            <% }) %>
+                                            <% }) %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- contentFor('additionalScript') %>
+<script type="text/javascript" src="/javascripts/specific/configurationDetails/materialDashboard.js"></script>
+
+<%- contentFor('body') %>
+<link rel="stylesheet" type="text/css" href="/stylesheets/specific/material-bootstrap-wizard.css">
+
+<div class="main">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2">
+                <div class="wizard-container">
+                    <div class="card wizard-card" data-color="purple" id="wizard" style="background: purple">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="wizard-header">
+                                    <div class="row">
+                                        <div class="col-sm-6 col-sm-offset-3">
+                                            <h4 class="text-center"><span style="color: white"><%= topic.title %></span></h4>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <button type="button" class="btn btn-simple btn-sm" data-toggle="modal"
+                                                    href="javascript:void(0)" data-backdrop="true"
+                                                    data-target="#comment" style="margin-top: 5%">
+                                                <span style="color: white"><strong>Comment</strong></span>
+                                            </button>
+                                            <% include ../../partials/forum/commentModal.ejs %>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-8 col-sm-offset-2">
+                                            <h6 class="text-center"><span style="color: white"><%= topic.description %></span></h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="wizard-container" style="padding-top: 0">
+                                    <% comments.forEach((item) => { %>
+                                    <div class="card" style="height: 20%; width: 95%; margin: 0 2.5% 2% 2.5%">
+                                        <div class="header" style="margin-left: 2%; height: 20%">
+                                            <div class="row">
+                                                <div class="col-sm-9">
+                                                    <p class="title"><%= item.text %></p>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <button type="button" class="btn btn-simple btn-sm pull-right" data-toggle="modal"
+                                                            href="javascript:void(0)" data-backdrop="true"
+                                                            data-target="#reply<%= item._id %>" style="margin-top: 5%">
+                                                        Reply
+                                                    </button>
+                                                    <% include ../../partials/forum/replyModal.ejs %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% replies.forEach((reply) => { %>
+                                    <% if (String(reply.ofComment._id) === String(item._id)) { %>
+                                    <div class="card" style="height: 20%; width: 85%; margin: -0.5% 2.5% 1% 12.5%">
+                                        <div class="header" style="margin-left: 2%; height: 20%">
+                                            <p class="title"><%= reply.text %></p>
+                                        </div>
+                                    </div>
+                                    <% } %>
+                                    <% }) %>
+                                    <% }) %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

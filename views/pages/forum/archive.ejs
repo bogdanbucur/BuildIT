@@ -1,0 +1,91 @@
+<%- contentFor('body') %>
+<link rel="stylesheet" type="text/css" href="/stylesheets/specific/material-bootstrap-wizard.css">
+
+<div class="main">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2">
+                <div class="wizard-container">
+                    <div class="card wizard-card" data-color="purple" id="wizard" style="background: purple">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="wizard-header">
+                                    <div class="row">
+                                        <div class="col-sm-6 col-sm-offset-3">
+                                            <h4 class="text-center"><span style="color: white">Archived threads</span></h4>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-8 col-sm-offset-2">
+                                            <h6 class="text-center"><span style="color: white">Here you can find all of the archived threads with every topic</span>
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="wizard-container" style="padding-top: 0">
+                                    <% threads.forEach((item) => {
+                                    if (item.archived === true) { %>
+                                    <div class="card" style="height: 20%; width: 95%; margin: 0 2.5% 2% 2.5%">
+                                        <div class="header" style="margin-left: 2%; height: 20%">
+                                            <a href="/archivedThread?threadID=<%= item._id %>">
+                                                <p class="title"><%= item.title %></p>
+                                            </a>
+                                        </div>
+                                        <div class="content" style="margin-left: 2%; height: 80%">
+                                            <%= item.description %>
+                                        </div>
+                                    </div>
+                                    <% }
+                                    }) %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card wizard-card" data-color="purple" id="wizard1" style="background: purple; margin-top: 2%">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="wizard-header">
+                                    <div class="row">
+                                        <div class="col-sm-6 col-sm-offset-3">
+                                            <h4 class="text-center"><span style="color: white">Archived topics</span></h4>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-8 col-sm-offset-2">
+                                            <h6 class="text-center"><span style="color: white">Here are the archived topics</span></h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="wizard-container" style="padding-top: 0">
+                                    <% threads.forEach((thread) => {
+                                    if (thread.archived === false) {
+                                    topics.forEach((topic) => {
+                                    if (String(thread._id) === String(topic.fromThread._id)) { %>
+                                    <div class="card" style="height: 20%; width: 95%; margin: 0 2.5% 2% 2.5%">
+                                        <div class="header" style="margin-left: 2%; height: 20%">
+                                            <a href="/topic?topicID=<%= topic._id %>">
+                                                <p class="title"><%= topic.title %></p>
+                                            </a>
+                                        </div>
+                                        <div class="content" style="margin-left: 2%; height: 80%">
+                                            <%= topic.description %>
+                                        </div>
+                                    </div>
+                                    <% }
+                                    })
+                                    }
+                                    }) %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- contentFor('additionalScript') %>
+<script>
+    console.log(<%- JSON.stringify(locals) %>)
+</script>
