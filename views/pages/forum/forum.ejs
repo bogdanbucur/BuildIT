@@ -53,34 +53,40 @@
                                 </div>
                                 <div class="wizard-container" style="padding-top: 0">
                                     <% threads.forEach((item) => {
+                                    if (item) {
                                     if (item.type === 0 && item.archived === false) { %>
                                     <div class="card" style="height: 20%; width: 95%; margin: 0 2.5% 2% 2.5%">
                                         <div class="header" style="margin-left: 2%; height: 20%">
                                             <div class="row">
                                                 <div class="col-sm-9">
                                                     <a href="/threadTopics?threadID=<%= item._id %>">
-                                                        <p class="title"><%= item.title %></p>
+                                                        <p class="title">
+                                                            <%= item.title %>
+                                                        </p>
                                                     </a>
                                                 </div>
                                                 <div class="col-sm-3">
-                                                    <% if (user.data.firstName && user.data.lastName) { %>
-                                                    <p class="description text-center">Posted by <%= user.data.firstName %> <%= user.data.lastName %> </p>
+                                                    <% if (String(item.postedBy._id) === String(user._id)) {
+                                                    if (user.data.firstName && user.data.lastName) { %>
+                                                    <p class="description text-center">
+                                                        Posted by <%= user.data.firstName %> <%= user.data.lastName %>
+                                                    </p>
+                                                    <% }
+                                                    } else {
+                                                    users.forEach((User) => {
 
-                                                    <% } else if (user.google.firstName && user.google.lastName) { %>
-                                                    <p class="description">Posted by <%= user.google.firstName %> <%= user.google.lastName %> </p>
+                                                    if (String(item.postedBy._id) === String(User._id)) {
 
-                                                    <% } else if (user.github.name) { %>
-                                                    <p class="description">Posted by <%= user.github.name %> </p>
+                                                    if (User.data.firstName && User.data.lastName) { %>
+                                                    <p class="description text-center">
+                                                        Posted by <%= User.data.firstName %> <%= User.data.lastName %>
+                                                    </p>
+                                                    <% }
 
-                                                    <% } else if (user.instagram.firstName && user.instagram.lastName) { %>
-                                                    <p class="description">Posted by <%= user.instagram.firstName %> <%= user.instagram.lastName %> </p>
+                                                    }
 
-                                                    <% } else if (user.facebook.name) { %>
-                                                    <p class="description">Posted by <%= user.facebook.name %> </p>
-
-                                                    <% } else if (user.local.username) { %>
-                                                    <p class="description">Posted by <%= user.local.username %> </p>
-                                                    <% } %>
+                                                    })
+                                                    } %>
                                                 </div>
                                             </div>
                                         </div>
@@ -89,6 +95,7 @@
                                         </div>
                                     </div>
                                     <% }
+                                    }
                                     }) %>
                                 </div>
                             </div>
@@ -138,9 +145,36 @@
                                     if (item.type === 1 && item.archived === false) { %>
                                     <div class="card" style="height: 20%; width: 95%; margin: 0 2.5% 2% 2.5%">
                                         <div class="header" style="margin-left: 2%; height: 20%">
-                                            <a href="/threadTopics?threadID=<%= item._id %>">
-                                                <p class="title"><%= item.title %></p>
-                                            </a>
+                                            <div class="row">
+                                                <div class="col-sm-9">
+                                                    <a href="/threadTopics?threadID=<%= item._id %>">
+                                                        <p class="title"><%= item.title %></p>
+                                                    </a>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <% if (String(item.postedBy._id) === String(user._id)) {
+                                                    if (user.data.firstName && user.data.lastName) { %>
+                                                    <p class="description text-center">
+                                                        Posted by <%= user.data.firstName %> <%= user.data.lastName %>
+                                                    </p>
+                                                    <% }
+                                                    } else {
+                                                    users.forEach((User) => {
+
+                                                    if (String(item.postedBy._id) === String(User._id)) {
+
+                                                    if (User.data.firstName && User.data.lastName) { %>
+                                                    <p class="description text-center">
+                                                        Posted by <%= User.data.firstName %> <%= User.data.lastName %>
+                                                    </p>
+                                                    <% }
+
+                                                    }
+
+                                                    })
+                                                    } %>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="content" style="margin-left: 2%; height: 80%">
                                             <%= item.description %>

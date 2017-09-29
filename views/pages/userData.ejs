@@ -1,38 +1,37 @@
 <%- contentFor('body') %>
 <link rel="stylesheet" type="text/css" href="/stylesheets/specific/hipster_cards.css">
-<link rel="stylesheet" type="text/css" href="/stylesheets/specific/coming-sssoon.css">
 
-<div class="main" style="margin-top: 100px;">
+<div class="main" style="margin-top: 5%">
 
     <div class="wrapper">
         <div class="container">
             <% users.forEach((item) => { %>
-                <div class="card-box col-md-4 col-sm-6">
-
+                <div class="card-box col-sm-4">
                     <div class="card">
                         <div class="header" style="height: 10%">
-                            <% if (item.github.oauthID) { %>
-                            <h4 class="text-center"><span style="margin-left: 5%">User created with Github</span></h4>
-                            <% } else if (item.google.oauthID) { %>
-                            <h4 class="text-center"><span style="margin-left: 5%">User created with Google</span></h4>
-                            <% } else if (item.instagram.oauthID) { %>
-                            <h4 class="text-center"><span style="margin-left: 5%">User created with Instagram</span></h4>
-                            <% } else if (item.local.username) { %>
+                            <% switch (user.data.registerType) {
+                                case 'local': %>
                             <h4 class="text-center"><span style="margin-left: 5%">User created locally</span></h4>
-                            <% } else if (item.facebook.oauthID) { %>
+                                   <% break
+                                case 'github': %>
+                            <h4 class="text-center"><span style="margin-left: 5%">User created with Github</span></h4>
+                                   <% break
+                                case 'google': %>
+                            <h4 class="text-center"><span style="margin-left: 5%">User created with Google</span></h4>
+                                   <% break
+                                case 'instagram': %>
+                            <h4 class="text-center"><span style="margin-left: 5%">User created with Instagram</span></h4>
+                                   <% break
+                                case 'facebook': %>
                             <h4 class="text-center"><span style="margin-left: 5%">User created with Facebook</span></h4>
-                            <% } %>
+                                   <% break
+                                default:
+                            } %>
                         </div>
                         <div class="content" style="height: 70%">
                             <h6 class="category">Name</h6>
-                            <% if (item.data.firstName && item.data.lastName) { %>
+                            <% if (item.data.firstName) { %>
                             <h5 class="title"><%= item.data.firstName %> <%= item.data.lastName %></h5>
-                            <% } else if (item.facebook.name) { %>
-                            <h5 class="title"><%= item.facebook.name %></h5>
-                            <% } else if (item.google.firstName && item.google.lastName) { %>
-                            <h5 class="title"><%= item.google.firstName %> <%= item.google.lastName %></h5>
-                            <% } else if (item.instagram.firstName && item.instagram.lastName) { %>
-                            <h5 class="title"><%= item.instagram.firstName %> <%= item.instagram.lastName %></h5>
                             <% } else { %>
                             <h5 class="title"></h5>
                             <% } %>
@@ -40,10 +39,7 @@
                             <h6 class="category">Username</h6>
                             <% if (item.local.username) { %>
                             <h5 class="title"><%= item.local.username %></h5>
-                            <% } else if (item.github.name) { %>
-                            <h5 class="title"><%= item.github.name %></h5>
                             <% } %>
-
 
                             <h6 class="category">Account Type</h6>
                             <h5 class="title"><%= item.data.accountType %></h5>
@@ -51,10 +47,6 @@
                             <h6 class="category">Email</h6>
                             <% if (item.data.email) { %>
                             <h5 class="title"><%= item.data.email %></h5>
-                            <% } else if (item.google.email) { %>
-                            <h5 class="title"><%= item.google.email %></h5>
-                            <% } else if (item.facebook.email) { %>
-                            <h5 class="title"><%= item.facebook.email %></h5>
                             <% } else { %>
                             <h5 class="title"></h5>
                             <% } %>
@@ -63,7 +55,6 @@
                             <h5 class="title"><%= item.data.userType %></h5>
                         </div>
                     </div>
-
                     <div class="description" style="margin-top: -20%">
                         <div class="row">
                             <div class="col-sm-5 col-sm-offset-1">

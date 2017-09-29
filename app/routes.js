@@ -78,59 +78,44 @@ module.exports = function(app, passport) {
     });
 
     app.get('/userProfile', isLoggedIn, function(req, res) {
-        let id = req.user._id;
-
-        return User.findById(id)
-            .then((docs)=>{
-                return res.render('pages/userProfile.ejs', {
-                    title      : 'User Profile',
-                    layout     : 'layout.ejs',
-                    user       : req.user,
-                    url        : req.query.Url,
-                    advBuild   : docs.data.builds,
-                    desktops   : docs.data.desktops,
-                    laptops    : docs.data.laptops
-                });
-            });
+        return res.render('pages/userProfile.ejs', {
+            title    : 'User Profile',
+            layout   : 'layout.ejs',
+            user     : req.user,
+            url      : req.query.Url,
+            advBuild : req.user.data.builds,
+            desktops : req.user.data.desktops,
+            laptops  : req.user.data.laptops
+        });
     });
 
     app.post('/editUserData', function(req, res) {
-        let id = req.user._id;
+        req.user.data.firstName   = req.body.firstName;
+        req.user.data.lastName    = req.body.lastName;
+        req.user.data.email       = req.body.email;
 
-        return User.findById(id)
-            .then((docs) => {
+        if (req.user.data.accountType !== 'advanced' && req.user.data.accountType !== 'beginner') {
+            req.user.data.accountType = req.body.accountType;
+        }
 
-                docs.data.firstName   = req.body.firstName;
-                docs.data.lastName    = req.body.lastName;
-                docs.data.email       = req.body.email;
-                docs.data.accountType = req.body.accountType;
-                docs.colType          = 0;
+        req.user.colType = 0;
 
-                docs.save(functions.save);
+        req.user.save(functions.save);
 
-                return res.redirect('/userProfile');
-            });
-
+        return res.redirect('/userProfile');
     });
 
     app.get('/home', isLoggedIn, function(req, res) {
-        let id = req.user._id;
-
-        Promise.all([
-            User.findById(id)
-                .then(),
-            IndexNews.find({})
-                .then()
-        ]).then((queryRes) => {
-            let model = {
-                    title      : 'Home',
-                    layout     : 'layout.ejs',
-                    user       : req.user,
-                    buildArray : queryRes[0].data.builds,
-                    news       : queryRes[1]
-                };
-            res.render('pages/index.ejs', model);
-        });
+        return IndexNews.find({})
+                .then((news) => {
+                    res.render('pages/index.ejs', {
+                        title      : 'Home',
+                        layout     : 'layout.ejs',
+                        user       : req.user,
+                        buildArray : req.user.data.builds,
+                        news       : news
+                    });
+                });
     });
 
     app.get('/benchmarks', isLoggedIn, (req, res) => {
@@ -271,7 +256,6 @@ module.exports = function(app, passport) {
     });
 
     app.get('/build', isLoggedIn, function(req, res) {
-        const id     = req.user._id;
         const failed = req.query.n;
 
         Promise.all([
@@ -282,11 +266,10 @@ module.exports = function(app, passport) {
             PowerSupply.find({}),
             Processors.find({}),
             RAM.find({}),
-            SSD.find({}),
-            User.findById(id)
+            SSD.find({})
         ]).then((queryRes) => {
             if (req.user.data.accountType === 'advanced') {
-                let model              = {
+                return res.render('pages/advanced/advancedBuild.ejs', {
                     title              : 'Build',
                     layout             : 'buildLayout.ejs',
                     user               : req.user,
@@ -298,18 +281,16 @@ module.exports = function(app, passport) {
                     cpuArray           : queryRes[5],
                     ramArray           : queryRes[6],
                     ssdArray           : queryRes[7],
-                    buildArray         : queryRes[8].data.builds
-                };
-                return res.render('pages/advanced/advancedBuild.ejs', model);
+                    buildArray         : req.user.data.builds
+                });
             } else if (req.user.data.accountType === 'beginner') {
-                let model = {
+                return res.render('pages/beginner/beginnerBuild.ejs', {
                     title      : 'Build',
                     layout     : 'buildLayout.ejs',
                     user       : req.user,
-                    buildArray : queryRes[8].data.builds,
+                    buildArray : req.user.data.builds,
                     failed     : failed
-                };
-                return res.render('pages/beginner/beginnerBuild.ejs', model);
+                });
             } else {
                 let url = req.originalUrl;
                 return res.redirect('/userProfile' + '?Url=' + url);
@@ -445,16 +426,12 @@ module.exports = function(app, passport) {
     });
 
     app.post('/laptopBuild', isLoggedIn, function (req, res) {
-        const userID   = req.user.id;
         const laptopID = req.query.u;
 
-        return User.findById(userID)
-            .then((doc) => {
-                doc.data.laptops.push(laptopID);
-                doc.save(functions.save);
+        req.user.data.laptops.push(laptopID);
+        req.user.save(functions.save);
 
-                return res.redirect('/userProfile');
-            });
+        return res.redirect('/userProfile');
 
     });
 
@@ -518,15 +495,11 @@ module.exports = function(app, passport) {
 
     app.post('/desktopBuild', isLoggedIn, function (req, res) {
         const desktopID = req.query.id;
-        const userID    = req.user._id;
 
-        return User.findById(userID)
-            .then((doc) => {
-                doc.data.desktops.push(desktopID);
-                doc.save(functions.save);
+        req.user.data.desktops.push(desktopID);
+        req.user.save(functions.save);
 
-                return res.redirect('/userProfile');
-            });
+        return res.redirect('/userProfile');
 
     });
 
@@ -599,39 +572,29 @@ module.exports = function(app, passport) {
     });
 
     app.post('/build/removeDesktop', isLoggedIn, function (req, res) {
-        const userID    = req.user._id;
         const desktopID = req.query.id;
 
-        return User.findById(userID)
-            .then((doc) => {
-                let index = doc.data.desktops.findIndex(i => i.id === desktopID);
-                doc.data.desktops.splice(index, 1);
-                doc.save(functions.save);
+        let index = req.user.data.desktops.findIndex(i => i.id === desktopID);
+        req.user.data.desktops.splice(index, 1);
+        req.user.save(functions.save);
 
-                return res.redirect('/userProfile');
-            });
+        return res.redirect('/userProfile');
 
     });
 
     app.post('/build/removeLaptop', isLoggedIn, function (req, res) {
         const laptopID = req.query.id;
-        const userID   = req.user._id;
 
-        return User.findById(userID)
-            .then((doc) => {
-                let index = doc.data.laptops.findIndex(i => i.id === laptopID);
-                doc.data.laptops.splice(index, 1);
-                doc.save(functions.save);
+        let index = req.user.data.laptops.findIndex(i => i.id === laptopID);
+        req.user.data.laptops.splice(index, 1);
+        req.user.save(functions.save);
 
-                return res.redirect('/userProfile');
-            });
-
+        return res.redirect('/userProfile');
     });
 
     app.post('/addToCart', function(req, res) {
         let pid      = req.body.pidArray.split(',');
         let config   = req.body.config;
-        let id       = req.user._id;
         let buildIds = {};
 
         for (let item of pid) {
@@ -668,37 +631,34 @@ module.exports = function(app, passport) {
             }
         }
 
-        Promise.all([
-            (function(err, data) {
-                let item = {
-                    case        : buildIds.caseID,
-                    gpu         : buildIds.gpuID,
-                    hdd         : buildIds.hddID,
-                    motherboard : buildIds.boardID,
-                    powerSupply : buildIds.powerSupplyID,
-                    cpu         : buildIds.cpuID,
-                    ram         : buildIds.ramID,
-                    ssd         : buildIds.ssdID,
-                    colType     : 1
-                };
-                data = AdvancedBuilds(item);
+        return (function(err, data) {
+            let item = {
+                case        : buildIds.caseID,
+                gpu         : buildIds.gpuID,
+                hdd         : buildIds.hddID,
+                motherboard : buildIds.boardID,
+                powerSupply : buildIds.powerSupplyID,
+                cpu         : buildIds.cpuID,
+                ram         : buildIds.ramID,
+                ssd         : buildIds.ssdID,
+                colType     : 1
+            };
+            data = AdvancedBuilds(item);
 
-                return data.save(functions.save);
-            })(),
-            User.findById(id)
-        ]).then((queryRes) => {
-                queryRes[1].data.builds.push({
-                    name : config,
-                    id   : queryRes[0]._id
-                });
-                queryRes[1].save(functions.save);
+            return data.save(functions.save);
+        })().then((doc) => {
+            req.user.data.builds.push({
+                name : config,
+                id   : doc[0]._id
             });
+            req.user.save(functions.save);
 
-        res.redirect('/build');
+            res.redirect('/build');
+        });
+
     });
 
     app.get('/build/configuration-details', isLoggedIn, function (req, res) {
-        let id              = req.user._id;
         let configurationID = req.query.id;
         let totalRating     = 0;
         let counter         = 0;
@@ -716,8 +676,7 @@ module.exports = function(app, passport) {
                     PowerSupply.findById(docs.powerSupply),
                     Processors.findById(docs.cpu),
                     RAM.findById(docs.ram),
-                    SSD.findById(docs.ssd),
-                    User.findById(id)
+                    SSD.findById(docs.ssd)
                 ]).then((queryRes) => {
 
                     let config = {
@@ -779,7 +738,7 @@ module.exports = function(app, passport) {
                         layout      : 'buildLayout.ejs',
                         user        : req.user,
                         Config      : config,
-                        buildArray  : queryRes[8].data.builds,
+                        buildArray  : req.user.data.builds,
                         buildID     : configurationID,
                         rating      : totalRating,
                         value       : totalValue
@@ -929,23 +888,17 @@ module.exports = function(app, passport) {
 
     app.post('/build/removeBuild', function (req, res) {
         let buildID = req.query.id.split('^')[0];
-        let id      = req.query.id.split('^')[1];
 
-        return User.findById(id)
-            .then((doc) => {
-                let index = doc.data.builds.findIndex(i => i.id === buildID);
-                doc.data.builds.splice(index, 1);
-                doc.save(functions.save);
+        let index = req.user.data.builds.findIndex(i => i.id === buildID);
+        req.user.data.builds.splice(index, 1);
+        req.user.save(functions.save);
 
-                return res.redirect('/userProfile');
-            });
+        return res.redirect('/userProfile');
 
     });
 
     app.get('/forum', isLoggedIn, (req, res) => {
          Promise.all([
-             User.findById(req.user._id)
-                 .then(),
              User.find({})
                  .then(),
              Thread.find({})
@@ -956,9 +909,9 @@ module.exports = function(app, passport) {
              res.render('pages/forum/forum.ejs', {
                  title   : 'Forum',
                  layout  : 'forumLayout.ejs',
-                 user    : queryRes[0],
-                 users   : queryRes[1],
-                 threads : queryRes[2]
+                 user    : req.user,
+                 users   : queryRes[0],
+                 threads : queryRes[1]
              });
          });
     });
@@ -1020,11 +973,7 @@ module.exports = function(app, passport) {
     });
 
     app.get('/archives', isLoggedIn, (req, res) => {
-        const userID = req.user._id;
-
         Promise.all([
-            User.findById(userID)
-                .then(),
             User.find({})
                 .then(),
             Thread.find({})
@@ -1040,21 +989,18 @@ module.exports = function(app, passport) {
             res.render('pages/forum/archive.ejs', {
                 title   : 'Forum Archives',
                 layout  : 'forumLayout.ejs',
-                user    : queryRes[0],
-                users   : queryRes[1],
-                threads : queryRes[2],
-                topics  : queryRes[3]
+                user    : req.user,
+                users   : queryRes[0],
+                threads : queryRes[1],
+                topics  : queryRes[2]
             });
         });
     });
 
     app.get('/archivedThread', isLoggedIn, (req, res) => {
         const threadID = req.query.threadID;
-        const userID   = req.user._id;
 
         Promise.all([
-            User.findById(userID)
-                .then(),
             User.find({})
                 .then(),
             Thread.findById(threadID)
@@ -1068,24 +1014,21 @@ module.exports = function(app, passport) {
                 .then()
         ]).then((queryRes) => {
             res.render('pages/forum/archivedThread.ejs', {
-                title  : queryRes[2].title,
+                title  : queryRes[1].title,
                 layout : 'forumLayout.ejs',
-                user   : queryRes[0],
-                users  : queryRes[1],
-                thread : queryRes[2],
-                topics : queryRes[3]
+                user   : req.user,
+                users  : queryRes[0],
+                thread : queryRes[1],
+                topics : queryRes[2]
             });
         });
     });
 
     app.get('/threadTopics', isLoggedIn, (req, res) => {
-        const userID   = req.user._id;
         const threadID = req.query.threadID;
 
         Promise.all([
             User.find({})
-                .then(),
-            User.findById(userID)
                 .then(),
             Thread.findById(threadID)
                 .populate('postedBy')
@@ -1097,12 +1040,12 @@ module.exports = function(app, passport) {
                 .then()
         ]).then((queryRes) => {
             res.render('pages/forum/threadTopics.ejs', {
-                title    : queryRes[2].title,
+                title    : queryRes[1].title,
                 layout   : 'forumLayout.ejs',
+                user     : req.user,
                 users    : queryRes[0],
-                user     : queryRes[1],
-                thread   : queryRes[2],
-                topics   : queryRes[3]
+                thread   : queryRes[1],
+                topics   : queryRes[2]
             });
         });
     });
@@ -1136,12 +1079,9 @@ module.exports = function(app, passport) {
     });
 
     app.get('/topic', isLoggedIn, (req, res) => {
-        const userID  = req.user._id;
         const topicID = req.query.topicID;
 
         Promise.all([
-            User.findById(userID)
-                .then(),
             User.find({})
                 .then(),
             Topic.findById(topicID)
@@ -1158,13 +1098,13 @@ module.exports = function(app, passport) {
                 .then()
         ]).then((queryRes) => {
             res.render('pages/forum/topic.ejs', {
-                title    : queryRes[2].title,
+                title    : queryRes[1].title,
                 layout   : 'forumLayout.ejs',
-                user     : queryRes[0],
-                users    : queryRes[1],
-                topic    : queryRes[2],
-                comments : queryRes[3],
-                replies  : queryRes[4]
+                user     : req.user,
+                users    : queryRes[0],
+                topic    : queryRes[1],
+                comments : queryRes[2],
+                replies  : queryRes[3]
             })
         });
     });
@@ -1197,13 +1137,12 @@ module.exports = function(app, passport) {
     });
 
     app.post('/reply', (req, res) => {
-        const userID    = req.query.id;
         const commentID = req.query.commentID;
         const topicID   = req.query.topicID;
 
         let reply = new Reply({
             text      : req.body.textReply,
-            postedBy  : userID,
+            postedBy  : req.user._id,
             ofComment : commentID
         });
 
@@ -1226,22 +1165,18 @@ module.exports = function(app, passport) {
     });
 
     app.get('/userData', isLoggedIn, (req, res) => {
-        const userID = req.user._id;
-
         Promise.all([
             User.find({})
                 .then(),
             UserTypes.find({})
-                .then(),
-            User.findById(userID)
                 .then()
         ]).then((queryRes) => {
-            if (queryRes[2].data.userType !== 'god' && queryRes[2].data.userType !== 'demigod') {
+            if (req.user.data.userType !== 'god' && req.user.data.userType !== 'demigod') {
                 res.redirect('/home');
             } else {
                 res.render('pages/userData.ejs', {
                     title     : 'User Data',
-                    layout    : 'buildLayout.ejs',
+                    layout    : 'layout.ejs',
                     user      : req.user,
                     users     : queryRes[0],
                     userTypes : queryRes[1]
@@ -1254,28 +1189,22 @@ module.exports = function(app, passport) {
         const userID = req.query.id;
 
         return User.findById(userID)
-            .then((docs) => {
-                docs.data.userType = req.body.typeUser;
-
-                docs.save(functions.save);
+            .then((doc) => {
+                doc.data.userType = req.body.typeUser;
+                doc.save(functions.save);
 
                 res.redirect('/userData');
-            })
+            });
     });
 
     app.post('/removeUser', (req, res) => {
-        const userID = req.query.id;
+        const time          = Date.now();
+        let t               = new Date(time);
+        req.user.deletedAt  = t.toDateString();
 
-        return User.findById(userID)
-            .then((docs) => {
-                const time      = Date.now();
-                let t           = new Date(time);
-                docs.deletedAt = t.toDateString();
+        req.user.save(functions.save);
 
-                docs.save(functions.save);
-
-                res.redirect('/userData');
-            })
+        res.redirect('/userData');
     });
 
 };

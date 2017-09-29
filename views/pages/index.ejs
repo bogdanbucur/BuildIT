@@ -1,14 +1,11 @@
 <%- contentFor('body') %>
-
 <link rel="stylesheet" type="text/css" href="/stylesheets/specific/hipster_cards.css">
-<link rel="stylesheet" type="text/css" href="/stylesheets/specific/charts.css">
 
-<div class="main" style="margin-top: 100px;">
+<div class="main" style="margin-top: 5%">
 
     <div class="wrapper">       
         <div class="container">
-            <%news.forEach(function (item) {%>
-                <div class="masonry-container">
+            <% news.forEach((item) => { %>
                     <div class="card-box col-md-4 col-sm-6">
                         <div class="card">
                             <div class="header">
@@ -23,16 +20,14 @@
                                     </a>
                                 </div>
                             </div>
-
                             <div class="content">
                                 <h6 class="category">News</h6>
-                                <h4 class="title"><a href="#"><%= item.title %></a></h4>
+                                <h4 class="title"><%= item.title %></h4>
                                 <p class="description"><%= item.description %></p>
                             </div>
-                        </div> <!-- end card -->
+                        </div>
                     </div>
-                </div>
-            <%})%>
+            <% }) %>
         </div>
     </div>
 

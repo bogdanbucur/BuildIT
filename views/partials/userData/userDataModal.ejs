@@ -4,16 +4,8 @@
             <form action="/updateUserType?id=<%= item._id %>" method="post">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <% if (item.data.firstName && item.data.lastName) { %>
+                    <% if (item.data.firstName) { %>
                     <h4 class="modal-title text-center"><%= item.data.firstName %> <%= item.data.lastName %></h4>
-                    <% } else if (item.facebook.name) { %>
-                    <h4 class="modal-title text-center"><%= item.facebook.name %></h4>
-                    <% } else if (item.google.firstName && item.google.lastName) { %>
-                    <h4 class="modal-title text-center"><%= item.google.firstName %> <%= item.google.lastName %></h4>
-                    <% } else if (item.instagram.firstName && item.instagram.lastName) { %>
-                    <h4 class="modal-title text-center"><%= item.instagram.firstName %> <%= item.instagram.lastName %></h4>
-                    <% } else if (item.github.name) { %>
-                    <h4 class="modal-title text-center"><%= item.github.name %></h4>
                     <% } else { %>
                     <h4 class="modal-title text-center"><%= item.local.username %></h4>
                     <% } %>

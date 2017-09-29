@@ -56,9 +56,36 @@
                                     if (item.archived === false) { %>
                                     <div class="card" style="height: 20%; width: 95%; margin: 0 2.5% 2% 2.5%">
                                         <div class="header" style="margin-left: 2%; height: 20%">
-                                            <a href="/topic?topicID=<%= item._id %>">
-                                                <p class="title"><%= item.title %></p>
-                                            </a>
+                                            <div class="row">
+                                                <div class="col-sm-9">
+                                                    <a href="/topic?topicID=<%= item._id %>">
+                                                        <p class="title"><%= item.title %></p>
+                                                    </a>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <% if (String(item.postedBy._id) === String(user._id)) {
+                                                    if (user.data.firstName && user.data.lastName) { %>
+                                                    <p class="description text-center">
+                                                        Posted by <%= user.data.firstName %> <%= user.data.lastName %>
+                                                    </p>
+                                                    <% }
+                                                    } else {
+                                                    users.forEach((User) => {
+
+                                                    if (String(item.postedBy._id) === String(User._id)) {
+
+                                                    if (User.data.firstName && User.data.lastName) { %>
+                                                    <p class="description text-center">
+                                                        Posted by <%= User.data.firstName %> <%= User.data.lastName %>
+                                                    </p>
+                                                    <% }
+
+                                                    }
+
+                                                    })
+                                                    } %>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="content" style="margin-left: 2%; height: 80%">
                                             <%= item.description %>

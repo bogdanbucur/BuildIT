@@ -35,9 +35,14 @@ module.exports = function (passport) {
                 } else {
                     let newUser            = new User();
 
-                    newUser.local.username = username;
-                    newUser.local.password = newUser.generateHash(password);
-                    newUser.data.userType  = 'user';
+                    newUser.local.username    = username;
+                    newUser.local.password    = newUser.generateHash(password);
+                    newUser.data.userType     = 'user';
+                    newUser.data.registerType = 'local';
+                    const time                = Date.now();
+                    let t                     = new Date(time);
+                    newUser.data.createdAt    = t.toDateString();
+                    newUser.data.deletedAt    = null;
 
                     newUser.save(function (err) {
                         if (err)
@@ -78,23 +83,25 @@ module.exports = function (passport) {
         profileFields: ['id', 'email', 'name', 'displayName', 'picture']
     }, function (token, refreshToken, profile, done) {
         process.nextTick(function () {
-            User.findOne({'facebook.id': profile.id}, function (err, user) {
+            User.findOne({'data.oauthID': profile.id}, function (err, user) {
                 if (err)
                     return done(err);
                 if (user) {
                     return done(null, user);
                 } else {
-                    const newUser            = new User();
+                    const newUser = new User();
 
-                    newUser.facebook.id      = profile.id;
-                    newUser.facebook.token   = token;
-                    newUser.facebook.name    = profile.name.givenName + ' ' + profile.name.familyName;
-                    newUser.facebook.email   = profile.emails[0].value;
-                    newUser.facebook.image   = profile.photos[0].value;
-                    const time               = Date.now();
-                    let t                    = new Date(time);
-                    newUser.facebook.created = t.toDateString();
-                    newUser.data.userType    = 'user';
+                    newUser.data.oauthID      = profile.id;
+                    newUser.data.firstName    = profile.name.givenName;
+                    newUser.data.lastName     = profile.name.familyName;
+                    newUser.data.email        = profile.emails[0].value;
+                    newUser.data.image        = profile.photos[0].value;
+                    newUser.data.userType     = 'user';
+                    newUser.data.registerType = 'facebook';
+                    const time                = Date.now();
+                    let t                     = new Date(time);
+                    newUser.data.createdAt    = t.toDateString();
+                    newUser.data.deletedAt    = null;
 
                     newUser.save(function (err) {
                         if (err)
@@ -114,21 +121,23 @@ module.exports = function (passport) {
         profileFields: ['id', 'displayName']
     }, function (accessToken, refreshToken, profile, done) {
         process.nextTick(function () {
-            User.findOne({'github.oauthID': profile.id}, function (err, user) {
+            User.findOne({'data.oauthID': profile.id}, function (err, user) {
                 if (err)
                     return done(err);
                 if (user) {
                     return done(null, user);
                 } else {
-                    const newUser          = new User();
+                    const newUser = new User();
 
-                    newUser.github.oauthID = profile.id;
-                    newUser.github.name    = profile.username;
-                    newUser.github.image   = profile._json.avatar_url;
-                    const time             = Date.now();
-                    let t                  = new Date(time);
-                    newUser.github.created = t.toDateString();
-                    newUser.data.userType  = 'user';
+                    newUser.data.oauthID      = profile.id;
+                    newUser.data.firstName    = profile.username;
+                    newUser.data.image        = profile._json.avatar_url;
+                    newUser.data.userType     = 'user';
+                    newUser.data.registerType = 'github';
+                    const time                = Date.now();
+                    let t                     = new Date(time);
+                    newUser.data.created      = t.toDateString();
+                    newUser.data.deletedAt    = null;
 
                     newUser.save(function (err) {
                         if (err) {
@@ -150,23 +159,25 @@ module.exports = function (passport) {
         profileFields: ['id', 'displayName', 'name', 'email']
     }, function (request, accessToken, refreshToken, profile, done) {
         process.nextTick(function () {
-            User.findOne({'google.oauthID': profile.id}, function (err, user) {
+            User.findOne({'data.oauthID': profile.id}, function (err, user) {
                 if (err)
                     return done(err);
                 if (user) {
                     return done(null, user);
                 } else {
-                    user                  = new User();
+                    user = new User();
 
-                    user.google.oauthID   = profile.id;
-                    user.google.firstName = profile.name.givenName;
-                    user.google.lastName  = profile.name.familyName;
-                    user.google.email     = profile.email;
-                    user.google.image     = profile.photos[0].value;
-                    const time            = Date.now();
-                    let t                 = new Date(time);
-                    user.google.created   = t.toDateString();
-                    user.data.userType    = 'user';
+                    user.data.oauthID      = profile.id;
+                    user.data.firstName    = profile.name.givenName;
+                    user.data.lastName     = profile.name.familyName;
+                    user.data.email        = profile.email;
+                    user.data.image        = profile.photos[0].value;
+                    user.data.userType     = 'user';
+                    user.data.registerType = 'google';
+                    const time             = Date.now();
+                    let t                  = new Date(time);
+                    user.data.created      = t.toDateString();
+                    user.data.deletedAt    = null;
 
                     user.save(function (err) {
                         if (err) {
@@ -187,24 +198,26 @@ module.exports = function (passport) {
         callbackURL: configAuth.instagram.callbackURL
     }, function (accessToken, refreshToken, profile, done) {
         process.nextTick(function () {
-            User.findOne({'instagram.oauthID': profile.id}, function (err, user) {
+            User.findOne({'data.oauthID': profile.id}, function (err, user) {
                 console.log(profile);
                 if (err)
                     return done(err);
                 if (user) {
                     return done(null, user);
                 } else {
-                    user                     = new User();
+                    user = new User();
 
-                    user.instagram.oauthID   = profile.id;
-                    user.instagram.username  = profile.username;
-                    user.instagram.firstName = profile.displayName.split(' ')[0];
-                    user.instagram.lastName  = profile.displayName.split(/[, ]+/).pop();
-                    user.instagram.image     = profile._json.data.profile_picture;
-                    const time               = Date.now();
-                    let t                    = new Date(time);
-                    user.instagram.created   = t.toDateString();
-                    user.data.userType       = 'user';
+                    user.data.oauthID      = profile.id;
+                    user.data.username     = profile.username;
+                    user.data.firstName    = profile.displayName.split(' ')[0];
+                    user.data.lastName     = profile.displayName.split(/[, ]+/).pop();
+                    user.data.image        = profile._json.data.profile_picture;
+                    user.data.userType     = 'user';
+                    user.data.registerType = 'instagram';
+                    const time             = Date.now();
+                    let t                  = new Date(time);
+                    user.data.created      = t.toDateString();
+                    user.data.deletedAt    = null;
 
                     user.save(function (err) {
                         if (err) {

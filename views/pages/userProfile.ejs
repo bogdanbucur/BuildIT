@@ -29,10 +29,6 @@ q<%- contentFor('body') %>
 											  <label for="username" class="control-label">Username</label>
 											  <% if (user.local.username) { %>
 											  <input id="username" type="text" class="form-control" value="<%= user.local.username %>" style="color: black;" disabled >
-											  <% } else if (user.github.name) { %>
-											  <input id="username" type="text" class="form-control" value="<%= user.github.name %>" style="color: black;" disabled >
-											  <% } else if (user.instagram.username) { %>
-											  <input id="username" type="text" class="form-control" value="<%= user.instagram.username %>" style="color: black;" disabled >
 											  <% } else { %>
 											  <input id="username" type="text" class="form-control" value="" style="color: black;" disabled >
 											  <% } %>
@@ -43,10 +39,6 @@ q<%- contentFor('body') %>
 											  <label for="email" class="control-label">Email address</label>
 											  <% if (user.data.email) { %>
                                               <input id="email" type="email" name="email" class="form-control" value="<%= user.data.email %>" >
-											  <% } else if (user.facebook.email) { %>
-                                              <input id="email" type="email" name="email" class="form-control" value="<%= user.facebook.email %>" >
-											  <% } else if (user.google.email) { %>
-											  <input id="email" type="email" name="email" class="form-control" value="<%= user.google.email %>" >
 											  <% } else { %>
 											  <input id="email" type="email" name="email" class="form-control" value="" >
 											  <% } %>
@@ -60,12 +52,6 @@ q<%- contentFor('body') %>
 											  <label for="firstName" class="control-label">Fist Name</label>
 											  <% if (user.data.firstName) { %>
                                               <input id="firstName" type="text" name="firstName" class="form-control" value="<%= user.data.firstName %>" >
-											  <% } else if (user.facebook.name) { %>
-                                              <input id="firstName" type="text" name="firstName" class="form-control" value="<%= user.facebook.name.split(' ')[0] %>" >
-											  <% } else if (user.google.firstName) { %>
-											  <input id="firstName" type="text" name="firstName" class="form-control" value="<%= user.google.firstName %>" >
-											  <% } else if (user.instagram.firstName) { %>
-											  <input id="firstName" type="text" name="firstName" class="form-control" value="<%= user.instagram.firstName %>" >
 											  <% } else { %>
 											  <input id="firstName" type="text" name="firstName" class="form-control" value="" >
 											  <% } %>
@@ -76,12 +62,6 @@ q<%- contentFor('body') %>
 											  <label for="lastName" class="control-label">Last Name</label>
 											  <% if (user.data.lastName) { %>
                                               <input id="lastName" type="text" name="lastName" class="form-control" value="<%= user.data.lastName %>" >
-											  <% } else if (user.facebook.name) { %>
-                                              <input id="lastName" type="text" name="lastName" class="form-control" value="<%= user.facebook.name.split(' ')[1] %>" >
-											  <% } else if (user.google.lastName) { %>
-											  <input id="lastName" type="text" name="lastName" class="form-control" value="<%= user.google.lastName %>" >
-											  <% } else if (user.instagram.lastName) { %>
-											  <input id="lastName" type="text" name="lastName" class="form-control" value="<%= user.instagram.lastName %>" >
 											  <% } else { %>
 											  <input id="lastName" type="text" name="lastName" class="form-control" value="" >
 											  <% } %>
@@ -117,14 +97,8 @@ q<%- contentFor('body') %>
 					  <div class="card card-profile">
 						  <div class="card-avatar">
 							  <a href="#pablo">
-								  <% if (user.github.image) { %>
-								  <img class="img" src="<%= user.github.image %>" height="220" width="280" style="background-color: white"/>
-								  <% } else if (user.facebook.image) { %>
-								  <img class="img" src="<%= user.facebook.image %>" height="220" width="280" style="background-color: white"/>
-								  <% } else if (user.google.image) { %>
-								  <img class="img" src="<%= user.google.image %>" height="220" width="280" style="background-color: white"/>
-								  <% } else if (user.instagram.image) { %>
-								  <img class="img" src="<%= user.instagram.image %>" height="220" width="280" style="background-color: white"/>
+								  <% if (user.data.image) { %>
+								  <img class="img" src="<%= user.data.image %>" height="220" width="280" style="background-color: white"/>
 								  <% } else if (user.data.accountType === 'advanced') { %>
 								  <img class="img" src="/images/userProfile/advancedUser.ico" height="220" width="280" style="background-color: white"/>
 								  <% } else if (user.data.accountType === 'beginner') { %>
@@ -139,14 +113,6 @@ q<%- contentFor('body') %>
 							  <h4 class="card-title" style="margin-top: 10%">
                                   <% if (user.data.firstName && user.data.lastName) { %>
                                   <%= user.data.firstName %> <%= user.data.lastName %>
-								  <% } else if (user.facebook.name) { %>
-								  <%= user.facebook.name %>
-								  <% } else if (user.github.name) { %>
-								  <%= user.github.name %>
-								  <% } else if (user.google.firstName && user.google.lastName) { %>
-								  <%= user.google.firstName %> <%= user.google.lastName %>
-								  <% } else if (user.instagram.firstName && user.instagram.lastName) { %>
-								  <%= user.instagram.firstName %> <%= user.instagram.lastName %>
 								  <% } else { %>
 								  <%= user.local.username %>
 								  <% } %>
