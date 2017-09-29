@@ -56,7 +56,3 @@ typings/
 
 # dotenv environment variables file
 .env
-
-# Ignore personal files from config directory
-/config/auth.js
-/config/database.js
