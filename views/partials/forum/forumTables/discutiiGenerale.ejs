@@ -1,0 +1,85 @@
+<table class="table table-responsive">
+    <thead>
+    <tr style="background: darkslategrey">
+        <th style="color: white" colspan="4">Discutii generale</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% threads.forEach((thread) => {
+    if (thread.type === 2 && thread.archived === false) {
+        let topicCount = thread.topics.length;
+        let postCount = 0;
+        let lastTopic = {
+            createdAt : ''
+        };
+        let user = {};
+        thread.topics.forEach((topic) => {
+            postCount += topic.comments.length;
+
+            if (String(lastTopic.createdAt) < String(topic.createdAt)) {
+                lastTopic = topic;
+            }
+
+            user = users.find(x => String(x._id) === String(topic.postedBy)).data
+
+        }) %>
+    <tr>
+        <td style="width: 50%;">
+            <a href="/threadTopics?threadID=<%= thread._id %>">
+                <p class="title">
+                    <span style="color: dimgray">
+                        <%= thread.title %>
+                    </span>
+                </p>
+            </a>
+            <p class="description">
+                <span style="color: white">
+                    <%= thread.description %>
+                </span>
+            </p>
+        </td>
+        <td style="width: 10%">
+            <p class="title text-center">
+                <span style="color: white">
+                    <%= topicCount %>
+                </span>
+            </p>
+            <p class="description text-center">
+                <span style="color: white">
+                    Topics
+                </span>
+            </p>
+        </td>
+        <td style="width: 10%">
+            <p class="title text-center">
+                <span style="color: white">
+                    <%= postCount %>
+                </span>
+            </p>
+            <p class="description text-center">
+                <span style="color: white">
+                    Posts
+                </span>
+            </p>
+        </td>
+        <td style="width: 30%">
+            <a href="/topic?topicID=<%= lastTopic._id %>">
+                <p class="title">
+                <span style="color: dimgray">
+                    <%= lastTopic.title %>
+                </span>
+                </p>
+            </a>
+            <p class="description">
+                <span style="color: white">
+                    <% if (lastTopic > {}) { %>
+                    Posted at <%= lastTopic.createdAt %> by <%= user.firstName %> <%= user.lastName %>
+                    <% } %>
+                </span>
+            </p>
+        </td>
+    </tr>
+    <% }
+    }) %>
+    </tbody>
+</table>

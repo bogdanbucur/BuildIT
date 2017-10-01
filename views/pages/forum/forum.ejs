@@ -6,13 +6,13 @@
         <div class="row">
             <div class="col-sm-8 col-sm-offset-2">
                 <div class="wizard-container">
-                    <div class="card wizard-card" data-color="purple" id="wizard" style="background: purple">
+                    <div class="card wizard-card" data-color="purple" id="wizard" style="background: darkgrey">
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="wizard-header">
                                     <div class="row">
                                         <div class="col-sm-6 col-sm-offset-3">
-                                            <h4 class="text-center"><span style="color: white">Sticky threads</span></h4>
+                                            <h4 class="text-center"><span style="color: white">Forum</span></h4>
                                         </div>
                                         <% let type = 0
                                         switch (user.data.userType) {
@@ -41,147 +41,21 @@
                                                     data-target="#mainThread" style="margin-top: 5%">
                                                 <span style="color: white"><strong>Add</strong></span>
                                             </button>
-                                            <% include ../../partials/forum/mainThreadModal.ejs %>
+                                            <% include ../../partials/forum/addThreadModal.ejs %>
                                         </div>
                                         <% } %>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-sm-8 col-sm-offset-2">
-                                            <h6 class="text-center"><span style="color: white">Sticky threads description</span></h6>
-                                        </div>
-                                    </div>
                                 </div>
                                 <div class="wizard-container" style="padding-top: 0">
-                                    <% threads.forEach((item) => {
-                                    if (item) {
-                                    if (item.type === 0 && item.archived === false) { %>
-                                    <div class="card" style="height: 20%; width: 95%; margin: 0 2.5% 2% 2.5%">
-                                        <div class="header" style="margin-left: 2%; height: 20%">
-                                            <div class="row">
-                                                <div class="col-sm-9">
-                                                    <a href="/threadTopics?threadID=<%= item._id %>">
-                                                        <p class="title">
-                                                            <%= item.title %>
-                                                        </p>
-                                                    </a>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <% if (String(item.postedBy._id) === String(user._id)) {
-                                                    if (user.data.firstName && user.data.lastName) { %>
-                                                    <p class="description text-center">
-                                                        Posted by <%= user.data.firstName %> <%= user.data.lastName %>
-                                                    </p>
-                                                    <% }
-                                                    } else {
-                                                    users.forEach((User) => {
-
-                                                    if (String(item.postedBy._id) === String(User._id)) {
-
-                                                    if (User.data.firstName && User.data.lastName) { %>
-                                                    <p class="description text-center">
-                                                        Posted by <%= User.data.firstName %> <%= User.data.lastName %>
-                                                    </p>
-                                                    <% }
-
-                                                    }
-
-                                                    })
-                                                    } %>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="content" style="margin-left: 2%; height: 80%">
-                                            <%= item.description %>
+                                    <div class="row" style="width: 90%; margin: 0 auto">
+                                        <div class="col-sm-12">
+                                            <%- include ../../partials/forum/forumTables/buildIT.ejs %>
+                                            <%- include ../../partials/forum/forumTables/howTo.ejs %>
+                                            <%- include ../../partials/forum/forumTables/discutiiGenerale.ejs %>
+                                            <%- include ../../partials/forum/forumTables/tehnologii.ejs %>
+                                            <%- include ../../partials/forum/forumTables/arhiva.ejs %>
                                         </div>
                                     </div>
-                                    <% }
-                                    }
-                                    }) %>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card wizard-card" data-color="purple" id="wizard1" style="background: purple; margin-top: 2%">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="wizard-header">
-                                    <div class="row">
-                                        <div class="col-sm-6 col-sm-offset-3">
-                                            <h4 class="text-center"><span style="color: white">Secondary threads</span></h4>
-                                        </div>
-                                        <% let types = 0
-                                        switch (user.data.userType) {
-                                            case 'god':
-                                                types = 1
-                                                break
-                                            case 'demigod':
-                                                types = 1
-                                                break
-                                            case 'moderator':
-                                                types = 1
-                                                break
-                                            default:
-                                                types = 0
-                                        }
-                                        if (types === 1) { %>
-                                        <div class="col-sm-2 col-sm-offset-1">
-                                            <button type="button" class="btn btn-simple btn-sm" data-toggle="modal"
-                                                    href="javascript:void(0)" data-backdrop="true"
-                                                    data-target="#secondThread" style="margin-top: 5%">
-                                                <span style="color: white"><strong>Add</strong></span>
-                                            </button>
-                                            <% include ../../partials/forum/secondThreadModal.ejs %>
-                                        </div>
-                                        <% } %>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-8 col-sm-offset-2">
-                                            <h6 class="text-center"><span style="color: white">Secondary threads description</span></h6>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="wizard-container" style="padding-top: 0">
-                                    <% threads.forEach((item) => {
-                                    if (item.type === 1 && item.archived === false) { %>
-                                    <div class="card" style="height: 20%; width: 95%; margin: 0 2.5% 2% 2.5%">
-                                        <div class="header" style="margin-left: 2%; height: 20%">
-                                            <div class="row">
-                                                <div class="col-sm-9">
-                                                    <a href="/threadTopics?threadID=<%= item._id %>">
-                                                        <p class="title"><%= item.title %></p>
-                                                    </a>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <% if (String(item.postedBy._id) === String(user._id)) {
-                                                    if (user.data.firstName && user.data.lastName) { %>
-                                                    <p class="description text-center">
-                                                        Posted by <%= user.data.firstName %> <%= user.data.lastName %>
-                                                    </p>
-                                                    <% }
-                                                    } else {
-                                                    users.forEach((User) => {
-
-                                                    if (String(item.postedBy._id) === String(User._id)) {
-
-                                                    if (User.data.firstName && User.data.lastName) { %>
-                                                    <p class="description text-center">
-                                                        Posted by <%= User.data.firstName %> <%= User.data.lastName %>
-                                                    </p>
-                                                    <% }
-
-                                                    }
-
-                                                    })
-                                                    } %>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="content" style="margin-left: 2%; height: 80%">
-                                            <%= item.description %>
-                                        </div>
-                                    </div>
-                                    <% }
-                                    }) %>
                                 </div>
                             </div>
                         </div>
@@ -193,4 +67,5 @@
 </div>
 
 <%- contentFor('additionalScript') %>
+<script type="text/javascript" src="/javascripts/specific/jquery.validate.min.js"></script>
 <script>console.log(<%- JSON.stringify(locals) %>)</script>

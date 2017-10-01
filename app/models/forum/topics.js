@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
 const threadTopicSchema = mongoose.Schema({
-    type        : Number,
     title       : String,
     description : String,
     archived    : Boolean,
+    createdAt   : String,
     fromThread : {
         type : mongoose.Schema.Types.ObjectId,
         ref  : 'Thread'

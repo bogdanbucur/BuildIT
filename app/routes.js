@@ -90,19 +90,24 @@ module.exports = function(app, passport) {
     });
 
     app.post('/editUserData', function(req, res) {
-        req.user.data.firstName   = req.body.firstName;
-        req.user.data.lastName    = req.body.lastName;
-        req.user.data.email       = req.body.email;
+        const userID = req.user._id;
 
-        if (req.user.data.accountType !== 'advanced' && req.user.data.accountType !== 'beginner') {
-            req.user.data.accountType = req.body.accountType;
-        }
+        return User.findById(userID)
+            .then((user) => {
+                user.data.firstName   = req.body.firstName;
+                user.data.lastName    = req.body.lastName;
+                user.data.email       = req.body.email;
 
-        req.user.colType = 0;
+                if (req.body.accountType === 'advanced' || req.body.accountType === 'beginner') {
+                    user.data.accountType = req.body.accountType;
+                }
 
-        req.user.save(functions.save);
+                user.colType = 0;
 
-        return res.redirect('/userProfile');
+                user.save(functions.save);
+
+                return res.redirect('/userProfile');
+            })
     });
 
     app.get('/home', isLoggedIn, function(req, res) {
@@ -904,6 +909,11 @@ module.exports = function(app, passport) {
              Thread.find({})
                  .populate('postedBy')
                  .populate('topics')
+                 .then(),
+             Topic.find({})
+                 .populate('fromThread')
+                 .populate('postedBy')
+                 .populate('comments')
                  .then()
          ]).then((queryRes) => {
              res.render('pages/forum/forum.ejs', {
@@ -911,13 +921,14 @@ module.exports = function(app, passport) {
                  layout  : 'forumLayout.ejs',
                  user    : req.user,
                  users   : queryRes[0],
-                 threads : queryRes[1]
+                 threads : queryRes[1],
+                 topics  : queryRes[2]
              });
          });
     });
 
     app.post('/addThread', (req, res) => {
-        const type = req.query.type;
+        const type = req.body.threadType;
 
         let thread = new Thread({
             type        : Number(type),
@@ -955,7 +966,7 @@ module.exports = function(app, passport) {
                 docs.save((err) => {
                     if (!err) {
                         return Topic.find({'fromThread._id': threadID})
-                            .exec((err, topics) => {
+                            .then((err, topics) => {
                                 if (!err) {
                                     topics.archived = false;
                                     topics.save(functions.save);
@@ -1052,13 +1063,20 @@ module.exports = function(app, passport) {
 
     app.post('/addTopic', (req, res) => {
         const threadID = req.query.threadID;
+        const d = new Date();
+        const date = d.toLocaleDateString();
+        const hour = d.getHours();
+        const min = d.getMinutes();
+        const sec = d.getSeconds();
+        const createdAt = date + ' ' + hour + ':' + min + ':' + sec;
 
         let topic = new Topic({
             title       : req.body.title,
             description : req.body.description,
             fromThread  : threadID,
             postedBy    : req.user._id,
-            archived    : false
+            archived    : false,
+            createdAt   : createdAt
         });
 
         topic.save((err) => {
