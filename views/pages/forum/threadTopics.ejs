@@ -6,14 +6,11 @@
         <div class="row">
             <div class="col-sm-8 col-sm-offset-2">
                 <div class="wizard-container">
-                    <div class="card wizard-card" data-color="purple" id="wizard" style="background: purple">
+                    <div class="card wizard-card" data-color="purple" id="wizard" style="background: darkgrey">
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="wizard-header">
                                     <div class="row">
-                                        <div class="col-sm-6 col-sm-offset-3">
-                                            <h4 class="text-center"><span style="color: white"><%= thread.title %></span></h4>
-                                        </div>
                                         <% let type = 0
                                         switch (user.data.userType) {
                                             case 'god':
@@ -29,7 +26,7 @@
                                                 type = 0
                                         }
                                         if (type === 1) { %>
-                                        <div class="col-sm-3">
+                                        <div class="col-sm-3 col-sm-offset-9">
                                             <button type="button" class="btn btn-simple btn-sm" data-toggle="modal"
                                                     href="javascript:void(0)" data-backdrop="true"
                                                     data-target="#archiveTopic" style="margin-top: 5%">
@@ -45,54 +42,79 @@
                                         </div>
                                         <% } %>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-sm-8 col-sm-offset-2">
-                                            <h6 class="text-center"><span style="color: white"><%= thread.description %></span></h6>
-                                        </div>
-                                    </div>
                                 </div>
                                 <div class="wizard-container" style="padding-top: 0">
-                                    <% topics.forEach((item) => {
-                                    if (item.archived === false) { %>
-                                    <div class="card" style="height: 20%; width: 95%; margin: 0 2.5% 2% 2.5%">
-                                        <div class="header" style="margin-left: 2%; height: 20%">
-                                            <div class="row">
-                                                <div class="col-sm-9">
-                                                    <a href="/topic?topicID=<%= item._id %>">
-                                                        <p class="title"><%= item.title %></p>
-                                                    </a>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <% if (String(item.postedBy._id) === String(user._id)) {
-                                                    if (user.data.firstName && user.data.lastName) { %>
-                                                    <p class="description text-center">
-                                                        Posted by <%= user.data.firstName %> <%= user.data.lastName %>
-                                                    </p>
-                                                    <% }
-                                                    } else {
-                                                    users.forEach((User) => {
+                                    <div class="row" style="width: 90%; margin: 0 auto">
+                                        <div class="col-sm-12">
+                                            <table class="table table-responsive">
+                                                <thead>
+                                                <tr style="background: darkslategrey">
+                                                    <th style="color: white" colspan="4">
+                                                        <%= thread.title %></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody style="border: 1px solid rgb(47,79,79)">
+                                                <% topics.forEach((topic) => {
+                                                if (topic.archived === false) {
+                                                    let postCount = topic.posts.length;
+                                                    var topicUser = users.find(x => String(x._id) === String(topic.postedBy._id));
 
-                                                    if (String(item.postedBy._id) === String(User._id)) {
+                                                    var lastPost = posts.find(x => String(x.fromTopic._id) === String(topic._id));
 
-                                                    if (User.data.firstName && User.data.lastName) { %>
-                                                    <p class="description text-center">
-                                                        Posted by <%= User.data.firstName %> <%= User.data.lastName %>
-                                                    </p>
-                                                    <% }
-
+                                                    if (lastPost > {}) {
+                                                        var User = users.find(y => String(y._id) === String(lastPost.postedBy._id));
                                                     }
-
-                                                    })
-                                                    } %>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="content" style="margin-left: 2%; height: 80%">
-                                            <%= item.description %>
+                                                %>
+                                                <tr>
+                                                    <td style="width: 50%;">
+                                                        <a href="/topic?topicID=<%= topic._id %>">
+                                                            <p class="title">
+                                                        <span style="color: dimgray">
+                                                            <%= topic.title %>
+                                                        </span>
+                                                            </p>
+                                                        </a>
+                                                        <p class="description">
+                                                    <span style="color: white">
+                                                        Started by <%= topicUser.data.firstName %> <%= topicUser.data.lastName %>
+                                                    </span>
+                                                        </p>
+                                                    </td>
+                                                    <td style="width: 10%">
+                                                        <p class="title text-center">
+                                                    <span style="color: white">
+                                                        <%= postCount %>
+                                                    </span>
+                                                        </p>
+                                                        <p class="description text-center">
+                                                    <span style="color: white">
+                                                        Replies
+                                                    </span>
+                                                        </p>
+                                                    </td>
+                                                    <td style="width: 30%">
+                                                        <p class="title">
+                                                    <span style="color: dimgray">
+                                                        <% if (lastPost > {}) { %>
+                                                        <%= lastPost.text %>
+                                                        <% } %>
+                                                    </span>
+                                                        </p>
+                                                        <p class="description">
+                                                    <span style="color: white">
+                                                        <% if (lastPost > {}) { %>
+                                                        Posted at <%= lastPost.createdAt %> by <%= User.data.firstName %> <%= User.data.lastName %>
+                                                        <% } %>
+                                                    </span>
+                                                        </p>
+                                                    </td>
+                                                </tr>
+                                                <% }
+                                                }) %>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
-                                    <% }
-                                    }) %>
                                 </div>
                             </div>
                         </div>
@@ -102,3 +124,8 @@
         </div>
     </div>
 </div>
+
+<%- contentFor('additionalScript') %>
+<script>
+    console.log(<%- JSON.stringify(locals) %>)
+</script>

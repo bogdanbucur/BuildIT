@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const TopicComments = mongoose.Schema({
+const TopicPosts = mongoose.Schema({
     text      : String,
     postedBy  : {
         type : mongoose.Schema.Types.ObjectId,
@@ -10,10 +10,14 @@ const TopicComments = mongoose.Schema({
         type : mongoose.Schema.Types.ObjectId,
         ref  : 'ThreadTopic'
     },
-    replies : [{
-        type : mongoose.Schema.Types.ObjectId,
-        ref  : 'CommentReply'
-    }]
+    createdAt : String,
+    edited : {
+        at : String,
+        by : {
+            firstName : String,
+            lastName : String
+        }
+    }
 });
 
-module.exports = mongoose.model('TopicComments', TopicComments);
+module.exports = mongoose.model('TopicPosts', TopicPosts);

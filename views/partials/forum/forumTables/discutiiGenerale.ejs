@@ -4,7 +4,7 @@
         <th style="color: white" colspan="4">Discutii generale</th>
     </tr>
     </thead>
-    <tbody>
+    <tbody style="border: 1px solid darkslategrey">
     <% threads.forEach((thread) => {
     if (thread.type === 2 && thread.archived === false) {
         let topicCount = thread.topics.length;
@@ -14,7 +14,7 @@
         };
         let user = {};
         thread.topics.forEach((topic) => {
-            postCount += topic.comments.length;
+            postCount += topic.posts.length;
 
             if (String(lastTopic.createdAt) < String(topic.createdAt)) {
                 lastTopic = topic;

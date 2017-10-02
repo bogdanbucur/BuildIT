@@ -4,6 +4,7 @@ const threadTopicSchema = mongoose.Schema({
     title       : String,
     description : String,
     archived    : Boolean,
+    archivedAt  : String,
     createdAt   : String,
     fromThread : {
         type : mongoose.Schema.Types.ObjectId,
@@ -13,9 +14,9 @@ const threadTopicSchema = mongoose.Schema({
         type : mongoose.Schema.Types.ObjectId,
         ref  : 'User'
     },
-    comments : [{
+    posts : [{
         type : mongoose.Schema.Types.ObjectId,
-        ref  : 'TopicComments'
+        ref  : 'TopicPosts'
     }]
 });
 

@@ -16,7 +16,7 @@ const functions      = require('../config/functions');
 const UserTypes      = require('./models/userTypes');
 const Thread         = require('./models/forum/threads');
 const Topic          = require('./models/forum/topics');
-const Comment        = require('./models/forum/comments');
+const Post           = require('./models/forum/posts');
 const Reply          = require('./models/forum/replies');
 
 module.exports = function(app, passport) {
@@ -946,11 +946,18 @@ module.exports = function(app, passport) {
 
     app.post('/archiveTopic', (req, res) => {
         const topicID = req.body.topic;
+        const d = new Date();
+        const date = d.toLocaleDateString();
+        const hour = d.getHours();
+        const min = d.getMinutes();
+        const sec = d.getSeconds();
+        const archivedAt = date + ' ' + hour + ':' + min + ':' + sec;
 
         return Topic.findById(topicID)
             .populate('fromThread')
             .then((docs) => {
                 docs.archived = true;
+                docs.archivedAt = archivedAt;
                 docs.save(functions.save);
 
                 res.redirect('/threadTopics?threadID=' + docs.fromThread._id);
@@ -959,16 +966,24 @@ module.exports = function(app, passport) {
 
     app.post('/archiveThread', (req, res) => {
         const threadID = req.body.thread;
+        const d = new Date();
+        const date = d.toLocaleDateString();
+        const hour = d.getHours();
+        const min = d.getMinutes();
+        const sec = d.getSeconds();
+        const archivedAt = date + ' ' + hour + ':' + min + ':' + sec;
 
         return Thread.findById(threadID)
             .then((docs) => {
                 docs.archived = true;
+                docs.archivedAt = archivedAt;
                 docs.save((err) => {
                     if (!err) {
                         return Topic.find({'fromThread._id': threadID})
                             .then((err, topics) => {
                                 if (!err) {
                                     topics.archived = false;
+                                    topics.archivedAt = archivedAt;
                                     topics.save(functions.save);
                                 } else {
                                     throw err;
@@ -1048,6 +1063,10 @@ module.exports = function(app, passport) {
             Topic.find({'fromThread': threadID})
                 .populate('fromThread')
                 .populate('postedBy')
+                .then(),
+            Post.find({})
+                .populate('fromTopic')
+                .populate('postedBy')
                 .then()
         ]).then((queryRes) => {
             res.render('pages/forum/threadTopics.ejs', {
@@ -1056,7 +1075,8 @@ module.exports = function(app, passport) {
                 user     : req.user,
                 users    : queryRes[0],
                 thread   : queryRes[1],
-                topics   : queryRes[2]
+                topics   : queryRes[2],
+                posts    : queryRes[3]
             });
         });
     });
@@ -1106,52 +1126,84 @@ module.exports = function(app, passport) {
                 .populate('fromThread')
                 .populate('postedBy')
                 .then(),
-            Comment.find({'fromTopic': topicID})
+            Post.find({'fromTopic': topicID})
                 .populate('postedBy')
                 .populate('fromTopic')
-                .then(),
-            Reply.find({})
-                .populate('postedBy')
-                .populate('ofComment')
                 .then()
         ]).then((queryRes) => {
             res.render('pages/forum/topic.ejs', {
-                title    : queryRes[1].title,
-                layout   : 'forumLayout.ejs',
-                user     : req.user,
-                users    : queryRes[0],
-                topic    : queryRes[1],
-                comments : queryRes[2],
-                replies  : queryRes[3]
+                title  : queryRes[1].title,
+                layout : 'forumLayout.ejs',
+                user   : req.user,
+                users  : queryRes[0],
+                topic  : queryRes[1],
+                posts  : queryRes[2]
             })
         });
     });
 
-    app.post('/comment', (req, res) => {
+    app.post('/post', (req, res) => {
         const topicID = req.query.topicID;
+        const d = new Date();
+        const date = d.toLocaleDateString();
+        const hour = d.getHours();
+        const min = d.getMinutes();
+        const sec = d.getSeconds();
+        const createdAt = date + ' ' + hour + ':' + min + ':' + sec;
 
-        let comment = new Comment({
-            text      : req.body.text,
+        let post = new Post({
+            text      : req.body.post,
             postedBy  : req.user._id,
-            fromTopic : topicID
+            fromTopic : topicID,
+            createdAt : createdAt,
+            edited : {
+                at : createdAt,
+                by : {
+                    firstName: req.user.data.firstName,
+                    lastName: req.user.data.lastName
+                }
+            }
         });
 
-        comment.save((err) => {
+        post.save((err) => {
             if (!err) {
                 Topic.findById(topicID)
                     .populate('fromThread')
                     .populate('postedBy')
-                    .populate('comments')
-                    .exec((err, comments) => {
+                    .populate('posts')
+                    .exec((err, topic) => {
                         if (!err) {
-                            comments.comments.push(comment._id);
-                            comments.save(functions.save);
+                            topic.posts.push(post._id);
+                            topic.save(functions.save);
                         }
                     });
             }
         });
 
         res.redirect('/topic?topicID=' + topicID);
+    });
+
+    app.post('editPost', (req, res) => {
+        const postID = req.query.postID;
+
+        return Post.findById(postID)
+            .populate('fromTopic')
+            .populate('postedBy')
+            .then((post) => {
+                const d = new Date();
+                const date = d.toLocaleDateString();
+                const hour = d.getHours();
+                const min = d.getMinutes();
+                const sec = d.getSeconds();
+
+                post.edited.at = date + ' ' + hour + ':' + min + ':' + sec;
+                post.edited.by.firstName = req.user.data.firstName;
+                post.edited.by.lastName = req.user.data.lastName;
+
+                post.save(functions.save);
+
+                return res.redirect('/topic?topicID?' + post.fromTopic._id);
+            });
     });
 
     app.post('/reply', (req, res) => {

@@ -13,6 +13,10 @@ module.exports = {
 
     save: (err) => {
         if (err) throw err;
+    },
+
+    findByID : (array1, array2) => {
+        return array1._id === array2._id;
     }
 
 };

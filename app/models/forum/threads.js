@@ -12,7 +12,8 @@ const threadSchema = new mongoose.Schema({
         type : mongoose.Schema.Types.ObjectId,
         ref  : 'ThreadTopic'
     }],
-    archived    : Boolean
+    archived    : Boolean,
+    archivedAt  : String
 });
 
 module.exports = mongoose.model('Thread', threadSchema);

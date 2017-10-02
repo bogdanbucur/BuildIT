@@ -102,13 +102,6 @@ $.fn.pageMe = function(opts){
 
 $(document).ready(function(){
 
-    $('#boardsTable').pageMe({pagerSelector:'#boardsPager',showPrevNext:true,hidePageNumbers:false,perPage:5});
-    $('#cpuTable').pageMe({pagerSelector:'#cpuPager',showPrevNext:true,hidePageNumbers:false,perPage:5});
-    $('#gpuTable').pageMe({pagerSelector:'#gpuPager',showPrevNext:true,hidePageNumbers:false,perPage:5});
-    $('#ramTable').pageMe({pagerSelector:'#ramPager',showPrevNext:true,hidePageNumbers:false,perPage:5});
-    $('#ssdTable').pageMe({pagerSelector:'#ssdPager',showPrevNext:true,hidePageNumbers:false,perPage:5});
-    $('#hddTable').pageMe({pagerSelector:'#hddPager',showPrevNext:true,hidePageNumbers:false,perPage:5});
-    $('#powerSupplyTable').pageMe({pagerSelector:'#powerSupplyPager',showPrevNext:true,hidePageNumbers:false,perPage:5});
-    $('#casesTable').pageMe({pagerSelector:'#casesPager',showPrevNext:true,hidePageNumbers:false,perPage:5});
+    $('#postsTable').pageMe({pagerSelector:'#postsPager',showPrevNext:true,hidePageNumbers:false,perPage:20});
 
 });

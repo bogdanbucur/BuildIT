@@ -14,7 +14,7 @@
         };
         let user = {};
         thread.topics.forEach((topic) => {
-            postCount += topic.comments.length;
+            postCount += topic.posts.length;
 
             if (String(lastTopic.createdAt) < String(topic.createdAt)) {
                 lastTopic = topic;
