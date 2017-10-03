@@ -14,7 +14,8 @@ const threadSchema = new mongoose.Schema({
     }],
     createdAt   : String,
     archived    : Boolean,
-    archivedAt  : String
+    archivedAt  : String,
+    updatedAt   : String
 });
 
 module.exports = mongoose.model('Thread', threadSchema);

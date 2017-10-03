@@ -6,6 +6,7 @@ const threadTopicSchema = mongoose.Schema({
     archived    : Boolean,
     archivedAt  : String,
     createdAt   : String,
+    updatedAt   : String,
     fromThread : {
         type : mongoose.Schema.Types.ObjectId,
         ref  : 'Thread'

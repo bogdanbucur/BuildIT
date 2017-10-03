@@ -1014,6 +1014,40 @@ module.exports = function(app, passport) {
             });
     });
 
+    app.post('/unArchiveThread', (req, res) => {
+        const threadID = req.body.thread;
+        const d = new Date();
+        const date = d.toLocaleDateString();
+        const t = new Date(d.getYear(), d.getMonth(), d.getDay(), d.getHours(), d.getMinutes(), d.getSeconds());
+        const time = t.toTimeString();
+        const updatedAd = date + ' ' + time;
+
+        return Thread.findById(threadID)
+            .then((thread) => {
+                thread.archived = false;
+                thread.updatedAt = updatedAd;
+
+                thread.save((err) => {
+                    if (!err) {
+                        return Topic.find({'fromThread': threadID})
+                           .then((topics) => {
+                                topics.forEach((topic) => {
+                                    console.log(topic);
+                                    topic.archived = false;
+                                    topic.updatedAt = updatedAt;
+
+                                    topic.save(functions.save);
+                                });
+                            })
+                    } else {
+                        throw err;
+                    }
+                });
+
+                res.redirect('/forum');
+            });
+    });
+
     app.get('/archives', isLoggedIn, (req, res) => {
         Promise.all([
             User.find({})
