@@ -100,6 +100,19 @@ module.exports = function(app, passport) {
 
                 if (req.body.accountType === 'advanced' || req.body.accountType === 'beginner') {
                     user.data.accountType = req.body.accountType;
+
+                    switch (req.body.accountType) {
+                        case 'beginner':
+                            if (!user.data.image) {
+                                user.data.image = '/images/userProfile/beginnerUser.ico';
+                            }
+                            break;
+                        case 'advanced':
+                            if (!user.data.image) {
+                                user.data.image = '/images/userProfile/advancedUser.ico';
+                            }
+                            break;
+                    }
                 }
 
                 user.colType = 0;
@@ -929,13 +942,18 @@ module.exports = function(app, passport) {
 
     app.post('/addThread', (req, res) => {
         const type = req.body.threadType;
+        const d = new Date();
+        const date = d.toLocaleDateString();
+        const t = new Date(d.getYear(), d.getMonth(), d.getDay(), d.getHours(), d.getMinutes(), d.getSeconds());
+        const time = t.toTimeString();
 
         let thread = new Thread({
             type        : Number(type),
             title       : req.body.title,
             description : req.body.description,
             postedBy    : req.user._id,
-            archived    : false
+            archived    : false,
+            createdAt   : date + ' ' + time
         });
 
         thread.save(functions.save);
@@ -948,19 +966,18 @@ module.exports = function(app, passport) {
         const topicID = req.body.topic;
         const d = new Date();
         const date = d.toLocaleDateString();
-        const hour = d.getHours();
-        const min = d.getMinutes();
-        const sec = d.getSeconds();
-        const archivedAt = date + ' ' + hour + ':' + min + ':' + sec;
+        const t = new Date(d.getYear(), d.getMonth(), d.getDay(), d.getHours(), d.getMinutes(), d.getSeconds());
+        const time = t.toTimeString();
+        const archivedAt = date + ' ' + time;
 
         return Topic.findById(topicID)
             .populate('fromThread')
-            .then((docs) => {
-                docs.archived = true;
-                docs.archivedAt = archivedAt;
-                docs.save(functions.save);
+            .then((topic) => {
+                topic.archived = true;
+                topic.archivedAt = archivedAt;
+                topic.save(functions.save);
 
-                res.redirect('/threadTopics?threadID=' + docs.fromThread._id);
+                res.redirect('/threadTopics?threadID=' + topic.fromThread._id);
             });
     });
 
@@ -968,26 +985,25 @@ module.exports = function(app, passport) {
         const threadID = req.body.thread;
         const d = new Date();
         const date = d.toLocaleDateString();
-        const hour = d.getHours();
-        const min = d.getMinutes();
-        const sec = d.getSeconds();
-        const archivedAt = date + ' ' + hour + ':' + min + ':' + sec;
+        const t = new Date(d.getYear(), d.getMonth(), d.getDay(), d.getHours(), d.getMinutes(), d.getSeconds());
+        const time = t.toTimeString();
+        const archivedAt = date + ' ' + time;
 
         return Thread.findById(threadID)
-            .then((docs) => {
-                docs.archived = true;
-                docs.archivedAt = archivedAt;
-                docs.save((err) => {
+            .then((thread) => {
+                thread.archived = true;
+                thread.archivedAt = archivedAt;
+
+                thread.save((err) => {
                     if (!err) {
-                        return Topic.find({'fromThread._id': threadID})
-                            .then((err, topics) => {
-                                if (!err) {
-                                    topics.archived = false;
-                                    topics.archivedAt = archivedAt;
-                                    topics.save(functions.save);
-                                } else {
-                                    throw err;
-                                }
+                        return Topic.find({'fromThread': {'_id': threadID}})
+                            .then((topics) => {
+                                topics.forEach((topic) => {
+                                    topic.archived = true;
+                                    topic.archivedAt = archivedAt;
+
+                                    topic.save(functions.save);
+                                });
                             })
                     } else {
                         throw err;
@@ -1085,10 +1101,9 @@ module.exports = function(app, passport) {
         const threadID = req.query.threadID;
         const d = new Date();
         const date = d.toLocaleDateString();
-        const hour = d.getHours();
-        const min = d.getMinutes();
-        const sec = d.getSeconds();
-        const createdAt = date + ' ' + hour + ':' + min + ':' + sec;
+        const t = new Date(d.getYear(), d.getMonth(), d.getDay(), d.getHours(), d.getMinutes(), d.getSeconds());
+        const time = t.toTimeString();
+        const createdAt = date + ' ' + time;
 
         let topic = new Topic({
             title       : req.body.title,
@@ -1146,10 +1161,9 @@ module.exports = function(app, passport) {
         const topicID = req.query.topicID;
         const d = new Date();
         const date = d.toLocaleDateString();
-        const hour = d.getHours();
-        const min = d.getMinutes();
-        const sec = d.getSeconds();
-        const createdAt = date + ' ' + hour + ':' + min + ':' + sec;
+        const t = new Date(d.getYear(), d.getMonth(), d.getDay(), d.getHours(), d.getMinutes(), d.getSeconds());
+        const time = t.toTimeString();
+        const createdAt = date + ' ' + time;
 
         let post = new Post({
             text      : req.body.post,
@@ -1192,11 +1206,10 @@ module.exports = function(app, passport) {
             .then((post) => {
                 const d = new Date();
                 const date = d.toLocaleDateString();
-                const hour = d.getHours();
-                const min = d.getMinutes();
-                const sec = d.getSeconds();
+                const t = new Date(d.getYear(), d.getMonth(), d.getDay(), d.getHours(), d.getMinutes(), d.getSeconds());
+                const time = t.toTimeString();
 
-                post.edited.at = date + ' ' + hour + ':' + min + ':' + sec;
+                post.edited.at = date + ' ' + time;
                 post.edited.by.firstName = req.user.data.firstName;
                 post.edited.by.lastName = req.user.data.lastName;
 
@@ -1268,9 +1281,11 @@ module.exports = function(app, passport) {
     });
 
     app.post('/removeUser', (req, res) => {
-        const time          = Date.now();
-        let t               = new Date(time);
-        req.user.deletedAt  = t.toDateString();
+        const d = new Date();
+        const date = d.toLocaleDateString();
+        const t = new Date(d.getYear(), d.getMonth(), d.getDay(), d.getHours(), d.getMinutes(), d.getSeconds());
+        const time = t.toTimeString();
+        req.user.deletedAt  = date + ' ' + time;
 
         req.user.save(functions.save);
 

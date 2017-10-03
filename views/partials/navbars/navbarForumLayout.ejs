@@ -15,19 +15,22 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
                         <li><a href="/forum"><strong>Forum</strong></a></li>
-                        <li><a href="/archives"><strong>Archive</strong></a></li>
                     </ul>
 
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown">
                             <% if (user.data.firstName && user.data.lastName) { %>
                             <a href="" class="dropdown-toggle" data-toggle="dropdown">
-                                <%= user.data.firstName %> <%= user.data.lastName %>
+                                <strong>
+                                    <%= user.data.firstName %> <%= user.data.lastName %>
+                                </strong>
                                 <b class="caret"></b>
                             </a>
                             <% } else { %>
                             <a href="" class="dropdown-toggle" data-toggle="dropdown">
-                                <%= user.local.username %>
+                                <strong>
+                                    <%= user.local.username %>
+                                </strong>
                                 <b class="caret"></b>
                             </a>
                             <% } %>

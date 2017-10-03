@@ -12,6 +12,7 @@ const threadSchema = new mongoose.Schema({
         type : mongoose.Schema.Types.ObjectId,
         ref  : 'ThreadTopic'
     }],
+    createdAt   : String,
     archived    : Boolean,
     archivedAt  : String
 });

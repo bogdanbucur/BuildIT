@@ -6,44 +6,51 @@
         <div class="row">
             <div class="col-sm-8 col-sm-offset-2">
                 <div class="wizard-container">
-                    <div class="card wizard-card" data-color="purple" id="wizard" style="background: #9b95d8">
+                    <div class="card wizard-card" data-color="purple" id="wizard">
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="wizard-header">
-                                    <h4 class="text-left" style="margin-left: 5%">
-                                        <span style="color: white">
-                                            <%= topic.fromThread.title %>
-                                        </span>
+                                    <h4 class="text-left text-primary" style="margin-left: 5%">
+                                        <%= topic.fromThread.title %>
                                     </h4>
-                                    <h6 class="text-left" style="margin-left: 4%">
-                                        <span style="color: white">
-                                            <%= topic.title %>
-                                        </span>
+                                    <h6 class="text-left text-primary" style="margin-left: 4%">
+                                        <%= topic.title %>
                                     </h6>
                                 </div>
                                 <div class="wizard-container" style="padding-top: 0">
                                     <div class="row" style="width: 90%; margin: 0 auto">
                                         <div class="col-sm-12">
-                                            <table class="table table-bordered table-responsive searchable" id="postsTable">
+                                            <table class="table table-responsive searchable" id="postsTable">
                                                 <% posts.forEach((post) => {
                                                     var User = users.find(x => String(x._id) === String(post.postedBy._id));
                                                 %>
                                                 <thead>
-                                                <tr style="background: #98a7e1">
+                                                <tr style="background: purple">
                                                     <th colspan="4">
-                                                        #<%= post._id %> by <%= User.data.firstName %> <%= User.data.lastName %>
-                                                        at <%= post.createdAt %>
+                                                        <span style="color: white">
+                                                            #<%= post._id %> by <%= User.data.firstName %> <%= User.data.lastName %>
+                                                            at <%= post.createdAt %>
+                                                        </span>
                                                     </th>
                                                 </tr>
                                                 </thead>
                                                 <tbody class="searchable" id="postsTable">
                                                 <tr>
-                                                    <td style="width: 15%">
-                                                        <%= User.data.image %> <br>
-                                                        Account type: <%= User.data.accountType %> <br>
-                                                        Rank: <%= User.data.userType %>
+                                                    <td style="width: 20%; border: 1px solid purple">
+                                                        <img src="<%= User.data.image %>" height="160" width="128" alt="" style="margin-left: 10%">
+                                                        <br>
+                                                        <p class="description">
+                                                            <span class="text-primary">
+                                                                Account type: <%= User.data.accountType %>
+                                                            </span>
+                                                        </p>
+                                                        <p class="description">
+                                                            <span class="text-primary">
+                                                                Rank: <%= User.data.userType %>
+                                                            </span>
+                                                        </p>
                                                     </td>
-                                                    <td style="width: 85%">
+                                                    <td style="width: 80%; border: 1px solid purple">
                                                         <%= post.text %> <br>
                                                         <% if (post.createdAt < post.edited.at) { %>
                                                         Last edited by <%= post.edited.by.firstName %> <%= post.edited.by.lastName %>
@@ -75,7 +82,9 @@
                                                     <div class="col-sm-12">
                                                         <div class="form-group">
                                                             <div class="form-group label-floating">
-                                                                <textarea title="post" id="post" name="post" class="form-control" rows="4" style="background: white"></textarea>
+                                                                <label for="post" class="control-label">Post here</label>
+                                                                <textarea title="post" id="post" name="post" class="form-control"
+                                                                          rows="8" style="border: 2px solid purple"></textarea>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -83,10 +92,8 @@
                                                 <div class="row" style="height: 10%">
                                                     <div class="col-sm-3 col-sm-offset-5">
                                                         <div class="form-group" style="margin-top: -30%">
-                                                            <button type="submit" class="btn btn-sm btn-simple">
-                                                                <span style="color: white">
-                                                                    Post
-                                                                </span>
+                                                            <button type="submit" class="btn btn-sm btn-primary">
+                                                                Post
                                                             </button>
                                                         </div>
                                                     </div>
@@ -105,4 +112,3 @@
 </div>
 
 <%- contentFor('additionalScript') %>
-<script type="text/javascript" src="/javascripts/specific/forumPosts/pagination.js"></script>

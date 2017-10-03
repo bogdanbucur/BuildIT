@@ -39,9 +39,11 @@ module.exports = function (passport) {
                     newUser.local.password    = newUser.generateHash(password);
                     newUser.data.userType     = 'user';
                     newUser.data.registerType = 'local';
-                    const time                = Date.now();
-                    let t                     = new Date(time);
-                    newUser.data.createdAt    = t.toDateString();
+                    const d = new Date();
+                    const date = d.toLocaleDateString();
+                    const t = new Date(d.getYear(), d.getMonth(), d.getDay(), d.getHours(), d.getMinutes(), d.getSeconds());
+                    const time = t.toTimeString();
+                    newUser.data.createdAt    = date + ' ' + time;
                     newUser.data.deletedAt    = null;
 
                     newUser.save(function (err) {
@@ -98,9 +100,11 @@ module.exports = function (passport) {
                     newUser.data.image        = profile.photos[0].value;
                     newUser.data.userType     = 'user';
                     newUser.data.registerType = 'facebook';
-                    const time                = Date.now();
-                    let t                     = new Date(time);
-                    newUser.data.createdAt    = t.toDateString();
+                    const d = new Date();
+                    const date = d.toLocaleDateString();
+                    const t = new Date(d.getYear(), d.getMonth(), d.getDay(), d.getHours(), d.getMinutes(), d.getSeconds());
+                    const time = t.toTimeString();
+                    newUser.data.createdAt    = date + ' ' + time;
                     newUser.data.deletedAt    = null;
 
                     newUser.save(function (err) {
@@ -134,9 +138,11 @@ module.exports = function (passport) {
                     newUser.data.image        = profile._json.avatar_url;
                     newUser.data.userType     = 'user';
                     newUser.data.registerType = 'github';
-                    const time                = Date.now();
-                    let t                     = new Date(time);
-                    newUser.data.created      = t.toDateString();
+                    const d = new Date();
+                    const date = d.toLocaleDateString();
+                    const t = new Date(d.getYear(), d.getMonth(), d.getDay(), d.getHours(), d.getMinutes(), d.getSeconds());
+                    const time = t.toTimeString();
+                    newUser.data.created      = date + ' ' + time;
                     newUser.data.deletedAt    = null;
 
                     newUser.save(function (err) {
@@ -174,9 +180,11 @@ module.exports = function (passport) {
                     user.data.image        = profile.photos[0].value;
                     user.data.userType     = 'user';
                     user.data.registerType = 'google';
-                    const time             = Date.now();
-                    let t                  = new Date(time);
-                    user.data.created      = t.toDateString();
+                    const d = new Date();
+                    const date = d.toLocaleDateString();
+                    const t = new Date(d.getYear(), d.getMonth(), d.getDay(), d.getHours(), d.getMinutes(), d.getSeconds());
+                    const time = t.toTimeString();
+                    user.data.created      = date + ' ' + time;
                     user.data.deletedAt    = null;
 
                     user.save(function (err) {
@@ -214,9 +222,11 @@ module.exports = function (passport) {
                     user.data.image        = profile._json.data.profile_picture;
                     user.data.userType     = 'user';
                     user.data.registerType = 'instagram';
-                    const time             = Date.now();
-                    let t                  = new Date(time);
-                    user.data.created      = t.toDateString();
+                    const d = new Date();
+                    const date = d.toLocaleDateString();
+                    const t = new Date(d.getYear(), d.getMonth(), d.getDay(), d.getHours(), d.getMinutes(), d.getSeconds());
+                    const time = t.toTimeString();
+                    user.data.created      = date + ' ' + time;
                     user.data.deletedAt    = null;
 
                     user.save(function (err) {

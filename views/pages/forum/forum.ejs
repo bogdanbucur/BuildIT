@@ -6,13 +6,13 @@
         <div class="row">
             <div class="col-sm-8 col-sm-offset-2">
                 <div class="wizard-container">
-                    <div class="card wizard-card" data-color="purple" id="wizard" style="background: darkgrey">
+                    <div class="card wizard-card" data-color="purple" id="wizard">
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="wizard-header">
                                     <div class="row">
                                         <div class="col-sm-6 col-sm-offset-3">
-                                            <h4 class="text-center"><span style="color: white">Forum</span></h4>
+                                            <h4 class="text-center text-primary">Forum</h4>
                                         </div>
                                         <% let type = 0
                                         switch (user.data.userType) {
@@ -33,13 +33,13 @@
                                             <button type="button" class="btn btn-simple btn-sm" data-toggle="modal"
                                                     href="javascript:void(0)" data-backdrop="true"
                                                     data-target="#archiveThread" style="margin-top: 5%">
-                                                <span style="color: white"><strong>Archive</strong></span>
+                                                <span class="text-primary"><strong>Archive</strong></span>
                                             </button>
                                             <% include ../../partials/forum/archiveThread.ejs %>
                                             <button type="button" class="btn btn-simple btn-sm" data-toggle="modal"
                                                     href="javascript:void(0)" data-backdrop="true"
                                                     data-target="#mainThread" style="margin-top: 5%">
-                                                <span style="color: white"><strong>Add</strong></span>
+                                                <span class="text-primary"><strong>Add</strong></span>
                                             </button>
                                             <% include ../../partials/forum/addThreadModal.ejs %>
                                         </div>
