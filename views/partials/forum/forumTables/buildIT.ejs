@@ -1,10 +1,10 @@
-<table class="table table-responsive">
+<table class="table table-responsive" style="border: 1px solid purple">
     <thead>
     <tr style="background: purple">
         <th style="color: white" colspan="4">BuildIT</th>
     </tr>
     </thead>
-    <tbody style="border: 1px solid purple">
+    <tbody>
     <% threads.forEach((thread) => {
     if (thread.type === 0 && thread.archived === false) {
         let topicCount = thread.topics.length;
@@ -57,7 +57,7 @@
             </p>
         </td>
         <td style="width: 30%">
-            <a href="/topic?topicID=<%= lastTopic._id %>">
+            <a href="/topic?topicID=<%= lastTopic._id %>&threadID=<%= thread._id %>">
                 <p class="title text-primary">
                     <%= lastTopic.title %>
                 </p>

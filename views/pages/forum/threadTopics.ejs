@@ -46,14 +46,14 @@
                                 <div class="wizard-container" style="padding-top: 0">
                                     <div class="row" style="width: 90%; margin: 0 auto">
                                         <div class="col-sm-12">
-                                            <table class="table table-responsive">
+                                            <table class="table table-responsive" style="border: 1px solid purple">
                                                 <thead>
                                                 <tr style="background: purple">
-                                                    <th style="color: white" colspan="4">
+                                                    <th style="color: white" colspan="3">
                                                         <%= thread.title %></th>
                                                 </tr>
                                                 </thead>
-                                                <tbody style="border: 1px solid purple">
+                                                <tbody>
                                                 <% topics.forEach((topic) => {
                                                 if (topic.archived === false) {
                                                     let postCount = topic.posts.length;
@@ -67,7 +67,7 @@
                                                 %>
                                                 <tr>
                                                     <td style="width: 50%;">
-                                                        <a href="/topic?topicID=<%= topic._id %>">
+                                                        <a href="/topic?topicID=<%= topic._id %>&threadID=<%= thread._id %>">
                                                             <p class="title text-primary">
                                                                 <%= topic.title %>
                                                             </p>
@@ -88,7 +88,7 @@
                                                             </strong>
                                                         </p>
                                                     </td>
-                                                    <td style="width: 30%">
+                                                    <td style="width: 38%">
                                                         <p class="title text-primary">
                                                             <% if (lastPost > {}) { %>
                                                             <%= lastPost.text %>

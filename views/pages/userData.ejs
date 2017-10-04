@@ -5,77 +5,81 @@
 
     <div class="wrapper">
         <div class="container">
-            <% users.forEach((item) => { %>
-                <div class="card-box col-sm-4">
-                    <div class="card">
-                        <div class="header" style="height: 10%">
-                            <% switch (user.data.registerType) {
-                                case 'local': %>
-                            <h4 class="text-center"><span style="margin-left: 5%">User created locally</span></h4>
-                                   <% break
-                                case 'github': %>
-                            <h4 class="text-center"><span style="margin-left: 5%">User created with Github</span></h4>
-                                   <% break
-                                case 'google': %>
-                            <h4 class="text-center"><span style="margin-left: 5%">User created with Google</span></h4>
-                                   <% break
-                                case 'instagram': %>
-                            <h4 class="text-center"><span style="margin-left: 5%">User created with Instagram</span></h4>
-                                   <% break
-                                case 'facebook': %>
-                            <h4 class="text-center"><span style="margin-left: 5%">User created with Facebook</span></h4>
-                                   <% break
-                                default:
-                            } %>
-                        </div>
-                        <div class="content" style="height: 70%">
-                            <h6 class="category">Name</h6>
-                            <% if (item.data.firstName) { %>
-                            <h5 class="title"><%= item.data.firstName %> <%= item.data.lastName %></h5>
-                            <% } else { %>
-                            <h5 class="title"></h5>
-                            <% } %>
-
-                            <h6 class="category">Username</h6>
-                            <% if (item.local.username) { %>
-                            <h5 class="title"><%= item.local.username %></h5>
-                            <% } %>
-
-                            <h6 class="category">Account Type</h6>
-                            <h5 class="title"><%= item.data.accountType %></h5>
-
-                            <h6 class="category">Email</h6>
-                            <% if (item.data.email) { %>
-                            <h5 class="title"><%= item.data.email %></h5>
-                            <% } else { %>
-                            <h5 class="title"></h5>
-                            <% } %>
-
-                            <h6 class="category">User Type</h6>
-                            <h5 class="title"><%= item.data.userType %></h5>
-                        </div>
+            <% users.forEach((item) => {
+                if (item.data.deletedAt !== null) { %>
+            <div class="card-box col-sm-4">
+                <div class="card">
+                    <div class="header" style="height: 10%">
+                        <% switch (item.data.registerType) {
+                        case 'local': %>
+                        <h4 class="text-center"><span style="margin-left: 5%">User created locally</span></h4>
+                        <% break
+                        case 'github': %>
+                        <h4 class="text-center"><span style="margin-left: 5%">User created with Github</span></h4>
+                        <% break
+                        case 'google': %>
+                        <h4 class="text-center"><span style="margin-left: 5%">User created with Google</span></h4>
+                        <% break
+                        case 'instagram': %>
+                        <h4 class="text-center"><span style="margin-left: 5%">User created with Instagram</span></h4>
+                        <% break
+                        case 'facebook': %>
+                        <h4 class="text-center"><span style="margin-left: 5%">User created with Facebook</span></h4>
+                        <% break
+                            default:
+                        } %>
                     </div>
-                    <div class="description" style="margin-top: -20%">
-                        <div class="row">
-                            <div class="col-sm-5 col-sm-offset-1">
-                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
-                                        href="javascript:void(0)" data-backdrop="true"
-                                        data-target="#userType<%= item._id%>">
-                                    Update User type
+                    <div class="content" style="height: 70%">
+                        <h6 class="category">Name</h6>
+                        <% if (item.data.firstName) { %>
+                        <h5 class="title"><%= item.data.firstName %> <%= item.data.lastName %></h5>
+                        <% } else { %>
+                        <h5 class="title"></h5>
+                        <% } %>
+
+                        <h6 class="category">Username</h6>
+                        <% if (item.local.username) { %>
+                        <h5 class="title"><%= item.local.username %></h5>
+                        <% } else { %>
+                        <h5 class="title"></h5>
+                        <% } %>
+
+                        <h6 class="category">Account Type</h6>
+                        <h5 class="title"><%= item.data.accountType %></h5>
+
+                        <h6 class="category">Email</h6>
+                        <% if (item.data.email) { %>
+                        <h5 class="title"><%= item.data.email %></h5>
+                        <% } else { %>
+                        <h5 class="title"></h5>
+                        <% } %>
+
+                        <h6 class="category">User Type</h6>
+                        <h5 class="title"><%= item.data.userType %></h5>
+                    </div>
+                </div>
+                <div class="description" style="margin-top: -20%">
+                    <div class="row">
+                        <div class="col-sm-5 col-sm-offset-1">
+                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
+                                    href="javascript:void(0)" data-backdrop="true"
+                                    data-target="#userType<%= item._id%>">
+                                Update User type
+                            </button>
+                            <% include ../partials/userData/userDataModal.ejs %>
+                        </div>
+                        <div class="col-sm-5">
+                            <form action="/userData/removeUser?id=<%= item._id %>" method="post" class="pull-right">
+                                <button type="submit" class="btn btn-danger btn-sm" style="">
+                                    Remove User
                                 </button>
-                                <% include ../partials/userData/userDataModal.ejs %>
-                            </div>
-                            <div class="col-sm-5">
-                                <form action="/userData/removeUser?id=<%= item._id %>" method="post" class="pull-right">
-                                    <button type="submit" class="btn btn-danger btn-sm" style="">
-                                        Remove User
-                                    </button>
-                                </form>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-            <% }) %>
+            </div>
+                <% }
+            }) %>
         </div>
     </div>
 

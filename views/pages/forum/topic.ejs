@@ -69,10 +69,15 @@
                                             <ul class="pagination pagination-lg pager" id="postsPager"></ul>
                                         </div>
                                         <div class="col-sm-4 col-sm-offset-4">
-                                            <p>
-                                                dsfdsfdsfdsfdskfbwojfb owbefou bewoufbnwe nwoebn fwbeouf bwbfw ieub
-                                                ksdjbnojwbfweobfou 'wbefo enwbofnew oncdjownc ojwdncoiw enfonwe onewb fnweonfo nw
-                                            </p>
+                                            <label for="topic" class="control-label">Go to topic</label>
+                                            <select class="form-control" id="topic" name="thread" onchange="location = this.value;">
+                                                <option disabled selected>Select</option>
+                                                <% topics.forEach((topic) => {
+                                                if (topic.archived === false) { %>
+                                                <option value="/topic?<%= topic._id %>&<%= topic.fromThread._id %>"><%= topic.title %></option>
+                                                <% }
+                                                }) %>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -112,3 +117,8 @@
 </div>
 
 <%- contentFor('additionalScript') %>
+<script>
+    function goToTopic(val) {
+
+    }
+</script>

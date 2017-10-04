@@ -614,6 +614,7 @@ module.exports = function (app, passport) {
     });
 
     app.post('/addToCart', function (req, res) {
+        const userId = req.user._id;
         let pid = req.body.pidArray.split(',');
         let config = req.body.config;
         let buildIds = {};
@@ -652,30 +653,61 @@ module.exports = function (app, passport) {
             }
         }
 
-        return (function (err, data) {
-            let item = {
-                case: buildIds.caseID,
-                gpu: buildIds.gpuID,
-                hdd: buildIds.hddID,
-                motherboard: buildIds.boardID,
-                powerSupply: buildIds.powerSupplyID,
-                cpu: buildIds.cpuID,
-                ram: buildIds.ramID,
-                ssd: buildIds.ssdID,
-                colType: 1
-            };
-            data = AdvancedBuilds(item);
+        // Promise.all([
+        //     (function (err, data) {
+        //         let item = {
+        //             case: buildIds.caseID,
+        //             gpu: buildIds.gpuID,
+        //             hdd: buildIds.hddID,
+        //             motherboard: buildIds.boardID,
+        //             powerSupply: buildIds.powerSupplyID,
+        //             cpu: buildIds.cpuID,
+        //             ram: buildIds.ramID,
+        //             ssd: buildIds.ssdID,
+        //             colType: 1
+        //         };
+        //         data = AdvancedBuilds(item);
+        //
+        //         return data.save(functions.save);
+        //     })().then(),
+        //     User.findById(userId)
+        //         .populate('builds')
+        //         .then()
+        // ]).then((queryRes) => {
+        //     console.log(queryRes[0]);
+        //
+        //     res.redirect('/build');
+        // });
 
-            return data.save(functions.save);
-        })().then((doc) => {
-            req.user.data.builds.push({
-                name: config,
-                id: doc[0]._id
-            });
-            req.user.save(functions.save);
+        return User.findById(userId)
+            .populate('builds')
+            .then((user) => {
+                let item = {
+                    case: buildIds.caseID,
+                    gpu: buildIds.gpuID,
+                    hdd: buildIds.hddID,
+                    motherboard: buildIds.boardID,
+                    powerSupply: buildIds.powerSupplyID,
+                    cpu: buildIds.cpuID,
+                    ram: buildIds.ramID,
+                    ssd: buildIds.ssdID,
+                    colType: 1
+                };
 
-            res.redirect('/build');
-        });
+                const build = AdvancedBuilds(item);
+
+                build.save(functions.save);
+
+                user.data.builds.push(
+                    {
+                        name: config,
+                        id: build._id
+                    }
+                );
+
+                user.save(functions.save);
+            })
+            .then(() => res.redirect('/userProfile'))
 
     });
 
@@ -1159,28 +1191,35 @@ module.exports = function (app, passport) {
 
     app.get('/topic', isLoggedIn, (req, res) => {
         const topicID = req.query.topicID;
+        const threadID = req.query.threadID;
 
         Promise.all([
             User.find({})
                 .then(),
+            Topic.find({'fromThread': threadID})
+                .populate('postedBy')
+                .populate('fromThread')
+                .then(),
             Topic.findById(topicID)
                 .populate('fromThread')
                 .populate('postedBy')
+                .populate('posts')
                 .then(),
             Post.find({'fromTopic': topicID})
                 .populate('postedBy')
                 .populate('fromTopic')
                 .then()
-        ]).then((queryRes) => {
+        ]).then((queryRes) =>
             res.render('pages/forum/topic.ejs', {
-                title: queryRes[1].title,
+                title: queryRes[2].title,
                 layout: 'forumLayout.ejs',
                 user: req.user,
                 users: queryRes[0],
-                topic: queryRes[1],
-                posts: queryRes[2]
+                topics: queryRes[1],
+                topic: queryRes[2],
+                posts: queryRes[3]
             })
-        });
+        );
     });
 
     app.post('/post', (req, res) => {
@@ -1306,16 +1345,21 @@ module.exports = function (app, passport) {
             });
     });
 
-    app.post('/removeUser', (req, res) => {
+    app.post('/userData/removeUser', (req, res) => {
+        const userID = req.query.id;
+
         const d = new Date();
         const date = d.toLocaleDateString();
         const t = new Date(d.getYear(), d.getMonth(), d.getDay(), d.getHours(), d.getMinutes(), d.getSeconds());
         const time = t.toTimeString();
-        req.user.deletedAt = date + ' ' + time;
 
-        req.user.save(functions.save);
+        return User.findById(userID)
+            .then((user) => {
+                user.data.deletedAt = date + ' ' + time;
 
-        res.redirect('/userData');
+                user.save(functions.save);
+            })
+            .then(() => res.redirect('/userData'))
     });
 
 };
