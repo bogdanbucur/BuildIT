@@ -1,102 +1,105 @@
-const User           = require('./models/user');
-const IndexNews      = require('./models/indexNews');
-const Laptop         = require('./models/beginnerBuild/laptop');
-const DesktopA       = require('./models/beginnerBuild/desktopA');
-const DesktopW       = require('./models/beginnerBuild/desktopW');
+const User = require('./models/user');
+const IndexNews = require('./models/indexNews');
+const Laptop = require('./models/beginnerBuild/laptop');
+const DesktopA = require('./models/beginnerBuild/desktopA');
+const DesktopW = require('./models/beginnerBuild/desktopW');
 const AdvancedBuilds = require('./models/advancedBuilds');
-const ComputerCases  = require('./models/components/computerCases');
+const ComputerCases = require('./models/components/computerCases');
 const GraphicsBoards = require('./models/components/graphicsBoards');
-const HardDrives     = require('./models/components/hardDrives');
-const MotherBoards   = require('./models/components/motherBoards');
-const PowerSupply    = require('./models/components/powerSupply');
-const Processors     = require('./models/components/processors');
-const RAM            = require('./models/components/ram');
-const SSD            = require('./models/components/ssd');
-const functions      = require('../config/functions');
-const UserTypes      = require('./models/userTypes');
-const Thread         = require('./models/forum/threads');
-const Topic          = require('./models/forum/topics');
-const Post           = require('./models/forum/posts');
-const Reply          = require('./models/forum/replies');
+const HardDrives = require('./models/components/hardDrives');
+const MotherBoards = require('./models/components/motherBoards');
+const PowerSupply = require('./models/components/powerSupply');
+const Processors = require('./models/components/processors');
+const RAM = require('./models/components/ram');
+const SSD = require('./models/components/ssd');
+const functions = require('../config/functions');
+const UserTypes = require('./models/userTypes');
+const Thread = require('./models/forum/threads');
+const Topic = require('./models/forum/topics');
+const Post = require('./models/forum/posts');
+const Reply = require('./models/forum/replies');
 
-module.exports = function(app, passport) {
+module.exports = function (app, passport) {
 
-    app.get('/', isNotLoggedIn, function(req, res) {
-        res.render('pages/landing.ejs', { layout: false });
+    app.get('/', isNotLoggedIn, function (req, res) {
+        res.render('pages/landing.ejs', {layout: false});
     });
 
     app.post('/signup', passport.authenticate('local-signup', {
-        successRedirect : '/',
-        failureRedirect : '/',
-        failureFlash : true
+        successRedirect: '/',
+        failureRedirect: '/',
+        failureFlash: true
     }));
 
     app.post('/login', passport.authenticate('local-login', {
-        successRedirect : '/home',
-        failureRedirect : '/',
-        failureFlash : true
+        successRedirect: '/home',
+        failureRedirect: '/',
+        failureFlash: true
     }));
 
     app.get('/auth/facebook', passport.authenticate('facebook', {
-        scope : ['user_about_me', 'email', 'public_profile']
+        scope: ['user_about_me', 'email', 'public_profile']
     }));
 
     app.get('/auth/facebook/callback', passport.authenticate('facebook', {
-        successRedirect : '/userProfile',
-        failureRedirect : '/'
+        successRedirect: '/userProfile',
+        failureRedirect: '/'
     }));
 
-    app.get('/auth/github', passport.authenticate('github'), function(req, res){});
+    app.get('/auth/github', passport.authenticate('github'), function (req, res) {
+    });
 
     app.get('/auth/github/callback', passport.authenticate('github', {
         failureRedirect: '/'
-    }), function(req, res) {
+    }), function (req, res) {
         res.redirect('/userProfile');
     });
 
-    app.get('/auth/google', passport.authenticate('google', { scope : [
-        'https://www.googleapis.com/auth/userinfo.email',
-        'https://www.googleapis.com/auth/userinfo.profile'
+    app.get('/auth/google', passport.authenticate('google', {
+        scope: [
+            'https://www.googleapis.com/auth/userinfo.email',
+            'https://www.googleapis.com/auth/userinfo.profile'
         ]
     }));
 
     app.get('/auth/google/callback', passport.authenticate('google', {
         failureRedirect: '/'
-    }), function(req, res) {
-            res.redirect('/userProfile');
-        });
-
-    app.get('/auth/instagram', passport.authenticate('instagram', { scope : ['basic'] }), function(req, res){});
-
-    app.get('/auth/instagram/callback', passport.authenticate('instagram', { failureRedirect: '/' }), function(req, res) {
+    }), function (req, res) {
         res.redirect('/userProfile');
     });
 
-    app.get('/logout', function(req, res) {
+    app.get('/auth/instagram', passport.authenticate('instagram', {scope: ['basic']}), function (req, res) {
+    });
+
+    app.get('/auth/instagram/callback', passport.authenticate('instagram', {failureRedirect: '/'}), function (req, res) {
+        res.redirect('/userProfile');
+    });
+
+    app.get('/logout', function (req, res) {
         req.logout();
         res.redirect('/');
     });
 
-    app.get('/userProfile', isLoggedIn, function(req, res) {
+    app.get('/userProfile', isLoggedIn, function (req, res) {
         return res.render('pages/userProfile.ejs', {
-            title    : 'User Profile',
-            layout   : 'layout.ejs',
-            user     : req.user,
-            url      : req.query.Url,
-            advBuild : req.user.data.builds,
-            desktops : req.user.data.desktops,
-            laptops  : req.user.data.laptops
+            title: 'User Profile',
+            layout: 'layout.ejs',
+            user: req.user,
+            url: req.query.Url,
+            advBuild: req.user.data.builds,
+            desktops: req.user.data.desktops,
+            laptops: req.user.data.laptops
         });
     });
 
-    app.post('/editUserData', function(req, res) {
+    app.post('/editUserData', function (req, res) {
         const userID = req.user._id;
 
         return User.findById(userID)
             .then((user) => {
-                user.data.firstName   = req.body.firstName;
-                user.data.lastName    = req.body.lastName;
-                user.data.email       = req.body.email;
+                user.data.firstName = req.body.firstName;
+                user.data.lastName = req.body.lastName;
+                user.data.email = req.body.email;
 
                 if (req.body.accountType === 'advanced' || req.body.accountType === 'beginner') {
                     user.data.accountType = req.body.accountType;
@@ -123,23 +126,23 @@ module.exports = function(app, passport) {
             })
     });
 
-    app.get('/home', isLoggedIn, function(req, res) {
+    app.get('/home', isLoggedIn, function (req, res) {
         return IndexNews.find({})
-                .then((news) => {
-                    res.render('pages/index.ejs', {
-                        title      : 'Home',
-                        layout     : 'layout.ejs',
-                        user       : req.user,
-                        buildArray : req.user.data.builds,
-                        news       : news
-                    });
+            .then((news) => {
+                res.render('pages/index.ejs', {
+                    title: 'Home',
+                    layout: 'layout.ejs',
+                    user: req.user,
+                    buildArray: req.user.data.builds,
+                    news: news
                 });
+            });
     });
 
     app.get('/benchmarks', isLoggedIn, (req, res) => {
-        const gpu   = parseInt(req.query.gpu);
+        const gpu = parseInt(req.query.gpu);
         const board = parseInt(req.query.board);
-        const cpu   = parseInt(req.query.cpu);
+        const cpu = parseInt(req.query.cpu);
 
         Promise.all([
             GraphicsBoards.find({})
@@ -149,26 +152,26 @@ module.exports = function(app, passport) {
             Processors.find({})
                 .then()
         ]).then((queryRes) => {
-            const gpuArray   = queryRes[0].sort(functions.sortByMark).reverse();
+            const gpuArray = queryRes[0].sort(functions.sortByMark).reverse();
             const boardArray = queryRes[1].sort(functions.sortByMark).reverse();
-            const cpuArray   = queryRes[2].sort(functions.sortByMark).reverse();
+            const cpuArray = queryRes[2].sort(functions.sortByMark).reverse();
 
             return res.render('pages/benchmarks.ejs', {
-                title       : 'Benchmarks',
-                layout      : 'buildLayout.ejs',
-                user        : req.user,
-                gpu         : gpuArray,
-                board       : boardArray,
-                cpu         : cpuArray,
-                gpuTab      : gpu,
-                boardTab    : board,
-                cpuTab      : cpu
+                title: 'Benchmarks',
+                layout: 'buildLayout.ejs',
+                user: req.user,
+                gpu: gpuArray,
+                board: boardArray,
+                cpu: cpuArray,
+                gpuTab: gpu,
+                boardTab: board,
+                cpuTab: cpu
             });
         });
     });
 
     app.post('/updateMark', (req, res) => {
-        const ID      = req.query.id.split('^')[0];
+        const ID = req.query.id.split('^')[0];
         const colType = parseInt(req.query.id.split('^')[1]);
 
         switch (colType) {
@@ -177,10 +180,10 @@ module.exports = function(app, passport) {
                     GraphicsBoards.findById(ID),
                     GraphicsBoards.find()
                 ]).then((queryRes) => {
-                    const mark    = parseInt(queryRes[0].mark);
+                    const mark = parseInt(queryRes[0].mark);
                     const newMark = mark + 1;
                     let markArray = [];
-                    let max       = 0;
+                    let max = 0;
 
                     queryRes[1].forEach((item) => {
                         markArray.push(parseInt(item.mark));
@@ -209,10 +212,10 @@ module.exports = function(app, passport) {
                     MotherBoards.findById(ID),
                     MotherBoards.find()
                 ]).then((queryRes) => {
-                    const mark    = parseInt(queryRes[0].mark);
+                    const mark = parseInt(queryRes[0].mark);
                     const newMark = mark + 1;
                     let markArray = [];
-                    let max       = 0;
+                    let max = 0;
 
                     queryRes[1].forEach((item) => {
                         markArray.push(parseInt(item.mark));
@@ -241,10 +244,10 @@ module.exports = function(app, passport) {
                     Processors.findById(ID),
                     Processors.find()
                 ]).then((queryRes) => {
-                    const mark    = parseInt(queryRes[0].mark);
+                    const mark = parseInt(queryRes[0].mark);
                     const newMark = mark + 1;
                     let markArray = [];
-                    let max       = 0;
+                    let max = 0;
 
                     queryRes[1].forEach((item) => {
                         markArray.push(parseInt(item.mark));
@@ -273,7 +276,7 @@ module.exports = function(app, passport) {
         }
     });
 
-    app.get('/build', isLoggedIn, function(req, res) {
+    app.get('/build', isLoggedIn, function (req, res) {
         const failed = req.query.n;
 
         Promise.all([
@@ -288,26 +291,26 @@ module.exports = function(app, passport) {
         ]).then((queryRes) => {
             if (req.user.data.accountType === 'advanced') {
                 return res.render('pages/advanced/advancedBuild.ejs', {
-                    title              : 'Build',
-                    layout             : 'buildLayout.ejs',
-                    user               : req.user,
-                    casesArray         : queryRes[0],
-                    gpuArray           : queryRes[1],
-                    hddArray           : queryRes[2],
-                    boardArray         : queryRes[3],
-                    powerSupplyArray   : queryRes[4],
-                    cpuArray           : queryRes[5],
-                    ramArray           : queryRes[6],
-                    ssdArray           : queryRes[7],
-                    buildArray         : req.user.data.builds
+                    title: 'Build',
+                    layout: 'buildLayout.ejs',
+                    user: req.user,
+                    casesArray: queryRes[0],
+                    gpuArray: queryRes[1],
+                    hddArray: queryRes[2],
+                    boardArray: queryRes[3],
+                    powerSupplyArray: queryRes[4],
+                    cpuArray: queryRes[5],
+                    ramArray: queryRes[6],
+                    ssdArray: queryRes[7],
+                    buildArray: req.user.data.builds
                 });
             } else if (req.user.data.accountType === 'beginner') {
                 return res.render('pages/beginner/beginnerBuild.ejs', {
-                    title      : 'Build',
-                    layout     : 'buildLayout.ejs',
-                    user       : req.user,
-                    buildArray : req.user.data.builds,
-                    failed     : failed
+                    title: 'Build',
+                    layout: 'buildLayout.ejs',
+                    user: req.user,
+                    buildArray: req.user.data.builds,
+                    failed: failed
                 });
             } else {
                 let url = req.originalUrl;
@@ -399,11 +402,11 @@ module.exports = function(app, passport) {
 
     });
 
-    app.get('/laptop', isLoggedIn, function(req, res) {
-        let laptop     = parseInt(req.query.u);
+    app.get('/laptop', isLoggedIn, function (req, res) {
+        let laptop = parseInt(req.query.u);
         let laptopName = {};
 
-        switch(laptop) {
+        switch (laptop) {
             case 7:
                 laptopName = {'mainName': 'Apple MacBook 12'};
                 break;
@@ -435,10 +438,10 @@ module.exports = function(app, passport) {
         return Laptop.findOne(laptopName)
             .then((docs) => {
                 return res.render('pages/beginner/laptopBuild.ejs', {
-                    layout     : 'buildLayout.ejs',
-                    title      : 'Laptop',
-                    user       : req.user,
-                    array      : docs
+                    layout: 'buildLayout.ejs',
+                    title: 'Laptop',
+                    user: req.user,
+                    array: docs
                 });
             });
     });
@@ -455,10 +458,10 @@ module.exports = function(app, passport) {
 
     app.get('/desktopw', isLoggedIn, function (req, res) {
         const desktopType = req.query.u;
-        let totalValue    = 0;
+        let totalValue = 0;
 
         Promise.all([
-            DesktopW.findOne({ 'desktopType': desktopType }, (err, doc) => {
+            DesktopW.findOne({'desktopType': desktopType}, (err, doc) => {
                 return doc;
             }).then((doc) => {
                 return Promise.all([
@@ -477,19 +480,19 @@ module.exports = function(app, passport) {
                         parseFloat(queryRes[7].price);
 
                     res.render('pages/beginner/desktopBuild.ejs', {
-                        title     : 'Desktop',
-                        layout    : 'buildLayout.ejs',
-                        user      : req.user,
-                        pcCase    : queryRes[0],
-                        gpu       : queryRes[1],
-                        hdd       : queryRes[2],
-                        board     : queryRes[3],
-                        power     : queryRes[4],
-                        cpu       : queryRes[5],
-                        ram       : queryRes[6],
-                        ssd       : queryRes[7],
-                        desktopID : queryRes[8]._id,
-                        value     : totalValue
+                        title: 'Desktop',
+                        layout: 'buildLayout.ejs',
+                        user: req.user,
+                        pcCase: queryRes[0],
+                        gpu: queryRes[1],
+                        hdd: queryRes[2],
+                        board: queryRes[3],
+                        power: queryRes[4],
+                        cpu: queryRes[5],
+                        ram: queryRes[6],
+                        ssd: queryRes[7],
+                        desktopID: queryRes[8]._id,
+                        value: totalValue
                     })
                 });
 
@@ -503,10 +506,10 @@ module.exports = function(app, passport) {
         return DesktopA.findOne({'desktopType': desktopID})
             .then((docs) => {
                 return res.render('pages/beginner/desktopA.ejs', {
-                    title  : 'Desktop',
-                    layout : 'buildLayout.ejs',
-                    user   : req.user,
-                    array  : docs
+                    title: 'Desktop',
+                    layout: 'buildLayout.ejs',
+                    user: req.user,
+                    array: docs
                 })
             });
     });
@@ -522,9 +525,9 @@ module.exports = function(app, passport) {
     });
 
     app.get('/desktopDetails', isLoggedIn, function (req, res) {
-        const desktopID   = req.query.u.split('^')[0];
+        const desktopID = req.query.u.split('^')[0];
         const desktopType = parseInt(req.query.u.split('^')[1]);
-        let totalValue    = 0;
+        let totalValue = 0;
 
         if (desktopType === 1) {
             Promise.all([
@@ -546,18 +549,18 @@ module.exports = function(app, passport) {
                             parseFloat(queryRes[7].price);
 
                         res.render('pages/beginner/desktopDetails.ejs', {
-                            title     : 'Desktop',
-                            layout    : 'buildLayout.ejs',
-                            user      : req.user,
-                            pcCase    : queryRes[0],
-                            gpu       : queryRes[1],
-                            hdd       : queryRes[2],
-                            board     : queryRes[3],
-                            power     : queryRes[4],
-                            cpu       : queryRes[5],
-                            ram       : queryRes[6],
-                            ssd       : queryRes[7],
-                            value     : totalValue
+                            title: 'Desktop',
+                            layout: 'buildLayout.ejs',
+                            user: req.user,
+                            pcCase: queryRes[0],
+                            gpu: queryRes[1],
+                            hdd: queryRes[2],
+                            board: queryRes[3],
+                            power: queryRes[4],
+                            cpu: queryRes[5],
+                            ram: queryRes[6],
+                            ssd: queryRes[7],
+                            value: totalValue
                         });
                     })
                 })
@@ -566,10 +569,10 @@ module.exports = function(app, passport) {
             return DesktopA.findById(desktopID)
                 .then((docs) => {
                     return res.render('pages/beginner/desktopADetails.ejs', {
-                        title  : 'Desktop',
-                        layout : 'buildLayout.ejs',
-                        user   : req.user,
-                        array  : docs
+                        title: 'Desktop',
+                        layout: 'buildLayout.ejs',
+                        user: req.user,
+                        array: docs
                     })
                 });
         }
@@ -581,10 +584,10 @@ module.exports = function(app, passport) {
         return Laptop.findById(laptopId)
             .then((docs) => {
                 return res.render('pages/beginner/laptopDetails.ejs', {
-                    title  : 'Laptop',
-                    layout : 'buildLayout',
-                    user   : req.user,
-                    array  : docs
+                    title: 'Laptop',
+                    layout: 'buildLayout',
+                    user: req.user,
+                    array: docs
                 });
             });
     });
@@ -610,64 +613,64 @@ module.exports = function(app, passport) {
         return res.redirect('/userProfile');
     });
 
-    app.post('/addToCart', function(req, res) {
-        let pid      = req.body.pidArray.split(',');
-        let config   = req.body.config;
+    app.post('/addToCart', function (req, res) {
+        let pid = req.body.pidArray.split(',');
+        let config = req.body.config;
         let buildIds = {};
 
         for (let item of pid) {
             let collectionType = parseInt(item.split('^')[1]);
-            let collectionID   = item.split('^')[0];
+            let collectionID = item.split('^')[0];
 
-            switch(collectionType) {
+            switch (collectionType) {
                 case 3: // Computer Case
-                    buildIds.caseID          = collectionID;
+                    buildIds.caseID = collectionID;
                     break;
                 case 4: // Graphics Board
-                    buildIds.gpuID           = collectionID;
+                    buildIds.gpuID = collectionID;
                     break;
                 case 5: // Hard Drive
-                    buildIds.hddID           = collectionID;
+                    buildIds.hddID = collectionID;
                     break;
                 case 7: // Motherboard
-                    buildIds.boardID         = collectionID;
+                    buildIds.boardID = collectionID;
                     break;
                 case 8: // Power Supply
-                    buildIds.powerSupplyID   = collectionID;
+                    buildIds.powerSupplyID = collectionID;
                     break;
                 case 9: // Processor
-                    buildIds.cpuID           = collectionID;
+                    buildIds.cpuID = collectionID;
                     break;
                 case 10: // RAM
-                    buildIds.ramID           = collectionID;
+                    buildIds.ramID = collectionID;
                     break;
                 case 11: // SSD
-                    buildIds.ssdID           = collectionID;
+                    buildIds.ssdID = collectionID;
                     break;
                 default:
                     break;
             }
         }
 
-        return (function(err, data) {
+        return (function (err, data) {
             let item = {
-                case        : buildIds.caseID,
-                gpu         : buildIds.gpuID,
-                hdd         : buildIds.hddID,
-                motherboard : buildIds.boardID,
-                powerSupply : buildIds.powerSupplyID,
-                cpu         : buildIds.cpuID,
-                ram         : buildIds.ramID,
-                ssd         : buildIds.ssdID,
-                colType     : 1
+                case: buildIds.caseID,
+                gpu: buildIds.gpuID,
+                hdd: buildIds.hddID,
+                motherboard: buildIds.boardID,
+                powerSupply: buildIds.powerSupplyID,
+                cpu: buildIds.cpuID,
+                ram: buildIds.ramID,
+                ssd: buildIds.ssdID,
+                colType: 1
             };
             data = AdvancedBuilds(item);
 
             return data.save(functions.save);
         })().then((doc) => {
             req.user.data.builds.push({
-                name : config,
-                id   : doc[0]._id
+                name: config,
+                id: doc[0]._id
             });
             req.user.save(functions.save);
 
@@ -678,9 +681,9 @@ module.exports = function(app, passport) {
 
     app.get('/build/configuration-details', isLoggedIn, function (req, res) {
         let configurationID = req.query.id;
-        let totalRating     = 0;
-        let counter         = 0;
-        let totalValue      = 0;
+        let totalRating = 0;
+        let counter = 0;
+        let totalValue = 0;
 
         Promise.all([
             AdvancedBuilds.findById(configurationID, function (err, docs) {
@@ -698,14 +701,14 @@ module.exports = function(app, passport) {
                 ]).then((queryRes) => {
 
                     let config = {
-                        case        : queryRes[0],
-                        gpu         : queryRes[1],
-                        hdd         : queryRes[2],
-                        board       : queryRes[3],
-                        powerSupply : queryRes[4],
-                        cpu         : queryRes[5],
-                        ram         : queryRes[6],
-                        ssd         : queryRes[7]
+                        case: queryRes[0],
+                        gpu: queryRes[1],
+                        hdd: queryRes[2],
+                        board: queryRes[3],
+                        powerSupply: queryRes[4],
+                        cpu: queryRes[5],
+                        ram: queryRes[6],
+                        ssd: queryRes[7]
                     };
 
                     if (config.case !== null) {
@@ -752,14 +755,14 @@ module.exports = function(app, passport) {
                     totalRating = (totalRating / counter).toFixed(1);
 
                     res.render('pages/configurationDetails.ejs', {
-                        title       : 'Configuration Details',
-                        layout      : 'buildLayout.ejs',
-                        user        : req.user,
-                        Config      : config,
-                        buildArray  : req.user.data.builds,
-                        buildID     : configurationID,
-                        rating      : totalRating,
-                        value       : totalValue
+                        title: 'Configuration Details',
+                        layout: 'buildLayout.ejs',
+                        user: req.user,
+                        Config: config,
+                        buildArray: req.user.data.builds,
+                        buildID: configurationID,
+                        rating: totalRating,
+                        value: totalValue
                     });
                 });
             }),
@@ -769,12 +772,12 @@ module.exports = function(app, passport) {
 
     app.post('/build/remove-component', function (req, res) {
         let componentID = req.query.id.split('^')[0];
-        let buildID     = req.query.id.split('^')[1];
+        let buildID = req.query.id.split('^')[1];
 
         return AdvancedBuilds.findById(buildID)
             .then((doc) => {
                 for (let key in doc) {
-                    if(doc[key] === componentID) {
+                    if (doc[key] === componentID) {
                         doc[key] = null;
                     }
                 }
@@ -787,8 +790,8 @@ module.exports = function(app, passport) {
     });
 
     app.get('/build/add-component', isLoggedIn, function (req, res) {
-        let missingFields       = req.query.fields.split('^')[0].split(',');
-        let buildID             = req.query.fields.split('^')[1];
+        let missingFields = req.query.fields.split('^')[0].split(',');
+        let buildID = req.query.fields.split('^')[1];
         let missingFieldsObject = {};
 
         Promise.all([
@@ -804,13 +807,13 @@ module.exports = function(app, passport) {
             missingFields.forEach(function (item) {
                 switch (item) {
                     case 'case':
-                        missingFieldsObject.pcCase      = queryRes[0];
+                        missingFieldsObject.pcCase = queryRes[0];
                         break;
                     case 'gpu':
-                        missingFieldsObject.gpu         = queryRes[1];
+                        missingFieldsObject.gpu = queryRes[1];
                         break;
                     case 'hdd':
-                        missingFieldsObject.hdd         = queryRes[2];
+                        missingFieldsObject.hdd = queryRes[2];
                         break;
                     case 'board':
                         missingFieldsObject.motherboard = queryRes[3];
@@ -819,13 +822,13 @@ module.exports = function(app, passport) {
                         missingFieldsObject.powerSupply = queryRes[4];
                         break;
                     case 'cpu':
-                        missingFieldsObject.cpu         = queryRes[5];
+                        missingFieldsObject.cpu = queryRes[5];
                         break;
                     case 'ram':
-                        missingFieldsObject.ram         = queryRes[6];
+                        missingFieldsObject.ram = queryRes[6];
                         break;
                     case 'ssd':
-                        missingFieldsObject.ssd         = queryRes[7];
+                        missingFieldsObject.ssd = queryRes[7];
                         break;
                     default:
                         break;
@@ -833,19 +836,19 @@ module.exports = function(app, passport) {
             });
 
             res.render('pages/addComponent.ejs', {
-                title       : 'Add Component',
-                layout      : 'buildLayout.ejs',
-                user        : req.user,
-                buildArray  : req.user.data.builds,
-                BuildID     : buildID,
-                pcCase      : missingFieldsObject.pcCase,
-                gpu         : missingFieldsObject.gpu,
-                hdd         : missingFieldsObject.hdd,
-                powerSupply : missingFieldsObject.powerSupply,
-                board       : missingFieldsObject.motherboard,
-                cpu         : missingFieldsObject.cpu,
-                ram         : missingFieldsObject.ram,
-                ssd         : missingFieldsObject.ssd,
+                title: 'Add Component',
+                layout: 'buildLayout.ejs',
+                user: req.user,
+                buildArray: req.user.data.builds,
+                BuildID: buildID,
+                pcCase: missingFieldsObject.pcCase,
+                gpu: missingFieldsObject.gpu,
+                hdd: missingFieldsObject.hdd,
+                powerSupply: missingFieldsObject.powerSupply,
+                board: missingFieldsObject.motherboard,
+                cpu: missingFieldsObject.cpu,
+                ram: missingFieldsObject.ram,
+                ssd: missingFieldsObject.ssd,
             });
         });
 
@@ -853,7 +856,7 @@ module.exports = function(app, passport) {
 
     app.post('/build/addBackToCart', function (req, res) {
         let buildArray = req.body.pidArray.split(',');
-        let BuildID    = req.body.buildID;
+        let BuildID = req.body.buildID;
 
         return AdvancedBuilds.findById(BuildID)
             .then((doc) => {
@@ -916,28 +919,28 @@ module.exports = function(app, passport) {
     });
 
     app.get('/forum', isLoggedIn, (req, res) => {
-         Promise.all([
-             User.find({})
-                 .then(),
-             Thread.find({})
-                 .populate('postedBy')
-                 .populate('topics')
-                 .then(),
-             Topic.find({})
-                 .populate('fromThread')
-                 .populate('postedBy')
-                 .populate('comments')
-                 .then()
-         ]).then((queryRes) => {
-             res.render('pages/forum/forum.ejs', {
-                 title   : 'Forum',
-                 layout  : 'forumLayout.ejs',
-                 user    : req.user,
-                 users   : queryRes[0],
-                 threads : queryRes[1],
-                 topics  : queryRes[2]
-             });
-         });
+        Promise.all([
+            User.find({})
+                .then(),
+            Thread.find({})
+                .populate('postedBy')
+                .populate('topics')
+                .then(),
+            Topic.find({})
+                .populate('fromThread')
+                .populate('postedBy')
+                .populate('comments')
+                .then()
+        ]).then((queryRes) => {
+            res.render('pages/forum/forum.ejs', {
+                title: 'Forum',
+                layout: 'forumLayout.ejs',
+                user: req.user,
+                users: queryRes[0],
+                threads: queryRes[1],
+                topics: queryRes[2]
+            });
+        });
     });
 
     app.post('/addThread', (req, res) => {
@@ -948,12 +951,12 @@ module.exports = function(app, passport) {
         const time = t.toTimeString();
 
         let thread = new Thread({
-            type        : Number(type),
-            title       : req.body.title,
-            description : req.body.description,
-            postedBy    : req.user._id,
-            archived    : false,
-            createdAt   : date + ' ' + time
+            type: Number(type),
+            title: req.body.title,
+            description: req.body.description,
+            postedBy: req.user._id,
+            archived: false,
+            createdAt: date + ' ' + time
         });
 
         thread.save(functions.save);
@@ -994,24 +997,19 @@ module.exports = function(app, passport) {
                 thread.archived = true;
                 thread.archivedAt = archivedAt;
 
-                thread.save((err) => {
-                    if (!err) {
-                        return Topic.find({'fromThread': {'_id': threadID}})
-                            .then((topics) => {
-                                topics.forEach((topic) => {
-                                    topic.archived = true;
-                                    topic.archivedAt = archivedAt;
+                return thread.save(functions.save);
+            })
+            .then(() => Topic.find({'fromThread': {'_id': threadID}}))
+            .then((topics) => {
+                return Promise.all(topics.map((topic) => {
+                    topic.archived = true;
+                    topic.archivedAt = archivedAt;
 
-                                    topic.save(functions.save);
-                                });
-                            })
-                    } else {
-                        throw err;
-                    }
-                });
-
-                res.redirect('/forum');
-            });
+                    return topic.save(functions.save);
+                }))
+            })
+            .then(() => res.redirect('/forum'))
+            .catch((err) => console.log(err));
     });
 
     app.post('/unArchiveThread', (req, res) => {
@@ -1020,32 +1018,26 @@ module.exports = function(app, passport) {
         const date = d.toLocaleDateString();
         const t = new Date(d.getYear(), d.getMonth(), d.getDay(), d.getHours(), d.getMinutes(), d.getSeconds());
         const time = t.toTimeString();
-        const updatedAd = date + ' ' + time;
+        const updatedAt = date + ' ' + time;
 
         return Thread.findById(threadID)
             .then((thread) => {
                 thread.archived = false;
-                thread.updatedAt = updatedAd;
+                thread.updatedAt = updatedAt;
 
-                thread.save((err) => {
-                    if (!err) {
-                        return Topic.find({'fromThread': threadID})
-                           .then((topics) => {
-                                topics.forEach((topic) => {
-                                    console.log(topic);
-                                    topic.archived = false;
-                                    topic.updatedAt = updatedAt;
+                return thread.save(functions.save);
+            })
+            .then(() => Topic.find({'fromThread': {'_id': threadID}}))
+            .then((topics) => {
+                return Promise.all(topics.map((topic) => {
+                    topic.archived = false;
+                    topic.updatedAt = updatedAt;
 
-                                    topic.save(functions.save);
-                                });
-                            })
-                    } else {
-                        throw err;
-                    }
-                });
-
-                res.redirect('/forum');
-            });
+                    return topic.save(functions.save);
+                }))
+            })
+            .then(() => res.redirect('/forum'))
+            .catch((err) => console.log(err));
     });
 
     app.get('/archives', isLoggedIn, (req, res) => {
@@ -1063,12 +1055,12 @@ module.exports = function(app, passport) {
                 .then()
         ]).then((queryRes) => {
             res.render('pages/forum/archive.ejs', {
-                title   : 'Forum Archives',
-                layout  : 'forumLayout.ejs',
-                user    : req.user,
-                users   : queryRes[0],
-                threads : queryRes[1],
-                topics  : queryRes[2]
+                title: 'Forum Archives',
+                layout: 'forumLayout.ejs',
+                user: req.user,
+                users: queryRes[0],
+                threads: queryRes[1],
+                topics: queryRes[2]
             });
         });
     });
@@ -1090,12 +1082,12 @@ module.exports = function(app, passport) {
                 .then()
         ]).then((queryRes) => {
             res.render('pages/forum/archivedThread.ejs', {
-                title  : queryRes[1].title,
-                layout : 'forumLayout.ejs',
-                user   : req.user,
-                users  : queryRes[0],
-                thread : queryRes[1],
-                topics : queryRes[2]
+                title: queryRes[1].title,
+                layout: 'forumLayout.ejs',
+                user: req.user,
+                users: queryRes[0],
+                thread: queryRes[1],
+                topics: queryRes[2]
             });
         });
     });
@@ -1120,13 +1112,13 @@ module.exports = function(app, passport) {
                 .then()
         ]).then((queryRes) => {
             res.render('pages/forum/threadTopics.ejs', {
-                title    : queryRes[1].title,
-                layout   : 'forumLayout.ejs',
-                user     : req.user,
-                users    : queryRes[0],
-                thread   : queryRes[1],
-                topics   : queryRes[2],
-                posts    : queryRes[3]
+                title: queryRes[1].title,
+                layout: 'forumLayout.ejs',
+                user: req.user,
+                users: queryRes[0],
+                thread: queryRes[1],
+                topics: queryRes[2],
+                posts: queryRes[3]
             });
         });
     });
@@ -1140,12 +1132,12 @@ module.exports = function(app, passport) {
         const createdAt = date + ' ' + time;
 
         let topic = new Topic({
-            title       : req.body.title,
-            description : req.body.description,
-            fromThread  : threadID,
-            postedBy    : req.user._id,
-            archived    : false,
-            createdAt   : createdAt
+            title: req.body.title,
+            description: req.body.description,
+            fromThread: threadID,
+            postedBy: req.user._id,
+            archived: false,
+            createdAt: createdAt
         });
 
         topic.save((err) => {
@@ -1181,12 +1173,12 @@ module.exports = function(app, passport) {
                 .then()
         ]).then((queryRes) => {
             res.render('pages/forum/topic.ejs', {
-                title  : queryRes[1].title,
-                layout : 'forumLayout.ejs',
-                user   : req.user,
-                users  : queryRes[0],
-                topic  : queryRes[1],
-                posts  : queryRes[2]
+                title: queryRes[1].title,
+                layout: 'forumLayout.ejs',
+                user: req.user,
+                users: queryRes[0],
+                topic: queryRes[1],
+                posts: queryRes[2]
             })
         });
     });
@@ -1200,13 +1192,13 @@ module.exports = function(app, passport) {
         const createdAt = date + ' ' + time;
 
         let post = new Post({
-            text      : req.body.post,
-            postedBy  : req.user._id,
-            fromTopic : topicID,
-            createdAt : createdAt,
-            edited : {
-                at : createdAt,
-                by : {
+            text: req.body.post,
+            postedBy: req.user._id,
+            fromTopic: topicID,
+            createdAt: createdAt,
+            edited: {
+                at: createdAt,
+                by: {
                     firstName: req.user.data.firstName,
                     lastName: req.user.data.lastName
                 }
@@ -1255,12 +1247,12 @@ module.exports = function(app, passport) {
 
     app.post('/reply', (req, res) => {
         const commentID = req.query.commentID;
-        const topicID   = req.query.topicID;
+        const topicID = req.query.topicID;
 
         let reply = new Reply({
-            text      : req.body.textReply,
-            postedBy  : req.user._id,
-            ofComment : commentID
+            text: req.body.textReply,
+            postedBy: req.user._id,
+            ofComment: commentID
         });
 
         reply.save((err) => {
@@ -1292,11 +1284,11 @@ module.exports = function(app, passport) {
                 res.redirect('/home');
             } else {
                 res.render('pages/userData.ejs', {
-                    title     : 'User Data',
-                    layout    : 'layout.ejs',
-                    user      : req.user,
-                    users     : queryRes[0],
-                    userTypes : queryRes[1]
+                    title: 'User Data',
+                    layout: 'layout.ejs',
+                    user: req.user,
+                    users: queryRes[0],
+                    userTypes: queryRes[1]
                 });
             }
         })
@@ -1319,7 +1311,7 @@ module.exports = function(app, passport) {
         const date = d.toLocaleDateString();
         const t = new Date(d.getYear(), d.getMonth(), d.getDay(), d.getHours(), d.getMinutes(), d.getSeconds());
         const time = t.toTimeString();
-        req.user.deletedAt  = date + ' ' + time;
+        req.user.deletedAt = date + ' ' + time;
 
         req.user.save(functions.save);
 
@@ -1328,7 +1320,7 @@ module.exports = function(app, passport) {
 
 };
 
-function isLoggedIn(req, res, next) {
+function isLoggedIn (req, res, next) {
     if (req.isAuthenticated()) {
         console.log("Logged in");
         return next();
@@ -1338,7 +1330,7 @@ function isLoggedIn(req, res, next) {
     }
 }
 
-function isNotLoggedIn(req, res, next) {
+function isNotLoggedIn (req, res, next) {
     if (req.isUnauthenticated()) {
         console.log("Not logged in");
         return next();

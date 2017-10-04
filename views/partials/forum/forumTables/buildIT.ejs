@@ -10,7 +10,7 @@
         let topicCount = thread.topics.length;
         let postCount = 0;
         let lastTopic = {
-            createdAt : ''
+            createdAt: ''
         };
         let user = {};
         thread.topics.forEach((topic) => {
@@ -63,11 +63,9 @@
                 </p>
             </a>
             <p class="description">
-                <strong>
-                    <% if (lastTopic > {}) { %>
-                    Posted at <%= lastTopic.createdAt %> by <%= user.firstName %> <%= user.lastName %>
-                    <% } %>
-                </strong>
+                <% if (lastTopic > {}) { %>
+                Posted at <%= lastTopic.createdAt %> by <%= user.firstName %> <%= user.lastName %>
+                <% } %>
             </p>
         </td>
     </tr>
