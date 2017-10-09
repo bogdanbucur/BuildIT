@@ -140,7 +140,7 @@ q<%- contentFor('body') %>
 										  <a href="/build/configuration-details?id=<%= item.id %>" style="color: #1D62F0"><%= item.name %></a>
 									  </td>
 									  <td style="width: 50%">
-										  <form action="/build/removeBuild?id=<%= item.id %>^<%= user._id %>" method="post" class="pull-right">
+										  <form action="/build/removeBuild?id=<%= item._id %>" method="post" class="pull-right">
 											  <button type="submit" class="btn btn-danger btn-sm" style="margin-top: -2%">
 												  Remove
 											  </button>

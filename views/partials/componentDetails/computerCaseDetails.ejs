@@ -1,5 +1,5 @@
-<button type="button" class="btn btn-primary btn-sm pull-right" style="margin-bottom: 5%" data-toggle="modal" data-target="#caseDetails<%= item._id%>" data-backdrop="true" >
-    Details
+<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#caseDetails<%= item._id%>" data-backdrop="true" >
+    <i class="fa fa-info"></i>
 </button>
 
 <div class="modal fade" id="caseDetails<%= item._id%>" role="dialog">
@@ -24,14 +24,14 @@
                             <!-- Item 1 -->
                             <div class="item active slide1">
                                 <div class="row">
-                                    <img width="300" height="300" data-animation="animated zoomInLeft" src="<%= item.image0 %>" style="margin-left: 25%">
+                                    <img width="300" height="300" data-animation="animated zoomInLeft" src="<%= item.image0 %>">
                                 </div>
                             </div>
                             <!-- Item 2 -->
                             <% if (item.image1) { %>
                             <div class="item slide2">
                                 <div class="row">
-                                    <img width="300" height="300" data-animation="animated zoomInLeft" src="<%= item.image1 %>" style="margin-left: 25%">
+                                    <img width="300" height="300" data-animation="animated zoomInLeft" src="<%= item.image1 %>">
                                 </div>
                             </div>
                             <% } %>
@@ -39,7 +39,7 @@
                             <% if (item.image2) { %>
                             <div class="item slide3">
                                 <div class="row">
-                                    <img width="300" height="300" data-animation="animated zoomInLeft" src="<%= item.image2 %>" style="margin-left: 25%">
+                                    <img width="300" height="300" data-animation="animated zoomInLeft" src="<%= item.image2 %>">
                                 </div>
                             </div>
                             <% } %>
@@ -47,7 +47,7 @@
                             <% if (item.image3) { %>
                             <div class="item slide4">
                                 <div class="row">
-                                    <img width="300" height="300" data-animation="animated zoomInLeft" src="<%= item.image3 %>" style="margin-left: 25%">
+                                    <img width="300" height="300" data-animation="animated zoomInLeft" src="<%= item.image3 %>">
                                 </div>
                             </div>
                             <% } %>

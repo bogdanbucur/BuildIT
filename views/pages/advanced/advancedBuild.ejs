@@ -2,77 +2,68 @@
 
 <link rel="stylesheet" type="text/css" href="/stylesheets/specific/material-bootstrap-wizard.css">
 <link rel="stylesheet" type="text/css" href="/stylesheets/specific/carousel.css">
-<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
 
 <div class="main container">
     <div class="image-container set-full-height">
         <div class="container">
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="wizard-container">
-                        <div class="card wizard-card" data-color="purple" id="wizard">
-                            <form action="/addToCart" method="post" data-remote="true" html="{:multipart=>true}">
-                                <!--        You can switch " data-color="rose" "  with one of the next bright colors: "blue", "green", "orange", "purple"        -->
-                                <div class="wizard-navigation">
-                                    <ul class="nav nav-pills">
-                                        <li><a href="#boards" data-toggle="tab">Boards</a></li>
-                                        <li><a href="#cpu" data-toggle="tab">CPU</a></li>
-                                        <li><a href="#gpu" data-toggle="tab">GPU</a></li>
-                                        <li><a href="#ram" data-toggle="tab">RAM</a></li>
-                                        <li><a href="#ssd" data-toggle="tab">SSD</a></li>
-                                        <li><a href="#hdd" data-toggle="tab">HDD</a></li>
-                                        <li><a href="#powerSupply" data-toggle="tab">Power Supply</a></li>
-                                        <li><a href="#cases" data-toggle="tab">Cases</a></li>
-                                        <li><a href="#complete" data-toggle="tab">Complete</a></li>
-                                    </ul>
-                                </div>
+            <div class="card wizard-card" data-color="purple" id="wizard">
+                <form action="/addToCart" method="post" data-remote="true" html="{:multipart=>true}">
+                    <div class="wizard-navigation">
+                        <ul class="nav nav-pills">
+                            <li><a href="#boards" data-toggle="tab">Boards</a></li>
+                            <li><a href="#cpu" data-toggle="tab">CPU</a></li>
+                            <li><a href="#gpu" data-toggle="tab">GPU</a></li>
+                            <li><a href="#ram" data-toggle="tab">RAM</a></li>
+                            <li><a href="#ssd" data-toggle="tab">SSD</a></li>
+                            <li><a href="#hdd" data-toggle="tab">HDD</a></li>
+                            <li><a href="#powerSupply" data-toggle="tab">Power Supply</a></li>
+                            <li><a href="#cases" data-toggle="tab">Cases</a></li>
+                            <li><a href="#complete" data-toggle="tab">Complete</a></li>
+                        </ul>
+                    </div>
 
-                                <div class="tab-content">
-                                    <div class="tab-pane" id="boards">
-                                        <% include ../../partials/advanced/advancedBoards.ejs %>
-                                    </div>
-                                    <div class="tab-pane" id="cpu">
-                                        <% include ../../partials/advanced/advancedCpus.ejs %>
-                                    </div>
-                                    <div class="tab-pane" id="gpu">
-                                        <% include ../../partials/advanced/advancedGpus.ejs %>
-                                    </div>
-                                    <div class="tab-pane" id="ram">
-                                        <% include ../../partials/advanced/advancedRams.ejs %>
-                                    </div>
-                                    <div class="tab-pane" id="ssd">
-                                        <% include ../../partials/advanced/advancedSSDs.ejs %>
-                                    </div>
-                                    <div class="tab-pane" id="hdd">
-                                        <% include ../../partials/advanced/advancedHdds.ejs %>
-                                    </div>
-                                    <div class="tab-pane" id="powerSupply">
-                                        <% include ../../partials/advanced/advancedPowerSupplies.ejs %>
-                                    </div>
-                                    <div class="tab-pane" id="cases">
-                                        <% include ../../partials/advanced/advancedCases.ejs %>
-                                    </div>
-                                    <div class="tab-pane" id="complete">
-                                        <% include ../../partials/advanced/advancedComplete.ejs %>
-                                    </div>
-                                </div>
-
-                                <div class="wizard-footer">
-                                    <div class="pull-right">
-                                        <input type='button' class='btn btn-next btn-fill btn-primary btn-wd' name='next' value='Next' />
-                                        <input type='button' class='btn btn-finish btn-fill btn-primary btn-wd' id="finish" value='Finish' />
-                                    </div>
-                                    <div class="pull-left">
-                                        <input type='button' class='btn btn-previous btn-fill btn-default btn-wd' name='previous' value='Previous' />
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </div>
-
-                            </form>
+                    <div class="tab-content">
+                        <div class="tab-pane" id="boards">
+                            <% include ../../partials/advanced/advancedBoards.ejs %>
+                        </div>
+                        <div class="tab-pane" id="cpu">
+                            <% include ../../partials/advanced/advancedCpus.ejs %>
+                        </div>
+                        <div class="tab-pane" id="gpu">
+                            <% include ../../partials/advanced/advancedGpus.ejs %>
+                        </div>
+                        <div class="tab-pane" id="ram">
+                            <% include ../../partials/advanced/advancedRams.ejs %>
+                        </div>
+                        <div class="tab-pane" id="ssd">
+                            <% include ../../partials/advanced/advancedSSDs.ejs %>
+                        </div>
+                        <div class="tab-pane" id="hdd">
+                            <% include ../../partials/advanced/advancedHdds.ejs %>
+                        </div>
+                        <div class="tab-pane" id="powerSupply">
+                            <% include ../../partials/advanced/advancedPowerSupplies.ejs %>
+                        </div>
+                        <div class="tab-pane" id="cases">
+                            <% include ../../partials/advanced/advancedCases.ejs %>
+                        </div>
+                        <div class="tab-pane" id="complete">
+                            <% include ../../partials/advanced/advancedComplete.ejs %>
                         </div>
                     </div>
-                </div>
+
+                    <div class="wizard-footer">
+                        <div class="pull-right">
+                            <input type='button' class='btn btn-next btn-fill btn-primary btn-wd' name='next' value='Next'/>
+                            <input type='button' class='btn btn-finish btn-fill btn-primary btn-wd' id="finish" value='Finish'/>
+                        </div>
+                        <div class="pull-left">
+                            <input type='button' class='btn btn-previous btn-fill btn-default btn-wd' name='previous' value='Previous'/>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                </form>
             </div>
         </div>
     </div>

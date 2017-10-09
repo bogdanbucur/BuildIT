@@ -81,7 +81,7 @@ module.exports = function (app, passport) {
     });
 
     app.get('/userProfile', isLoggedIn, function (req, res) {
-        return res.render('pages/userProfile.ejs', {
+        res.render('pages/userProfile.ejs', {
             title: 'User Profile',
             layout: 'layout.ejs',
             user: req.user,
@@ -614,7 +614,7 @@ module.exports = function (app, passport) {
     });
 
     app.post('/addToCart', function (req, res) {
-        const userId = req.user._id;
+        const userID = req.user._id;
         let pid = req.body.pidArray.split(',');
         let config = req.body.config;
         let buildIds = {};
@@ -653,33 +653,7 @@ module.exports = function (app, passport) {
             }
         }
 
-        // Promise.all([
-        //     (function (err, data) {
-        //         let item = {
-        //             case: buildIds.caseID,
-        //             gpu: buildIds.gpuID,
-        //             hdd: buildIds.hddID,
-        //             motherboard: buildIds.boardID,
-        //             powerSupply: buildIds.powerSupplyID,
-        //             cpu: buildIds.cpuID,
-        //             ram: buildIds.ramID,
-        //             ssd: buildIds.ssdID,
-        //             colType: 1
-        //         };
-        //         data = AdvancedBuilds(item);
-        //
-        //         return data.save(functions.save);
-        //     })().then(),
-        //     User.findById(userId)
-        //         .populate('builds')
-        //         .then()
-        // ]).then((queryRes) => {
-        //     console.log(queryRes[0]);
-        //
-        //     res.redirect('/build');
-        // });
-
-        return User.findById(userId)
+        return User.findById(userID)
             .populate('builds')
             .then((user) => {
                 let item = {
@@ -691,7 +665,8 @@ module.exports = function (app, passport) {
                     cpu: buildIds.cpuID,
                     ram: buildIds.ramID,
                     ssd: buildIds.ssdID,
-                    colType: 1
+                    colType: 1,
+                    ofUser: userID
                 };
 
                 const build = AdvancedBuilds(item);

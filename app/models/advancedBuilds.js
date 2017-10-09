@@ -16,8 +16,4 @@ let advancedBuildsSchema = mongoose.Schema({
     colType     : String
 });
 
-advancedBuildsSchema.pre('save', function(next){
-    next();
-});
-
 module.exports = mongoose.model('AdvancedBuilds', advancedBuildsSchema);

@@ -4,66 +4,43 @@
         <thead>
         <tr>
             <th style="width: 10%"></th>
-            <th style="width: 15%">Name</th>
-            <th style="width: 10%">CPU Socket</th>
-            <th style="width: 10%">Chipset</th>
-            <th style="width: 10%">Memory Type</th>
-            <th style="width: 10%">Memory Capacity</th>
-            <th style="width: 10%">LAN</th>
+            <th style="width: 60%">Description</th>
             <th style="width: 10%">Rating</th>
             <th style="width: 10%">Price</th>
         </tr>
         </thead>
         <tbody class="searchable1" id="boardsTable">
-        <%boardArray.forEach(function(item) {%>
+        <% boardArray.forEach(function(item) { %>
         <tr>
-            <th scope="row" style="width: 10%;">
+            <th scope="row" style="width: 10%">
                 <img src="<%= item.image0 %>" alt="" height="64" width="64">
             </th>
-            <td style="width: 15%;">
-                <%= item.name %>
+            <td style="width: 60%">
+                <%= item.description %>
             </td>
-            <td style="width: 10%;">
-                <%= item.cpuSocket %>
+            <td style="width: 10%">
+                <%= item.rating %>
+                <li class="fa fa-star" style="color: gold"></li>
             </td>
-            <td style="width: 10%;">
-                <%= item.cpuChipset %>
-            </td>
-            <td style="width: 10%;">
-                <%= item.memoryType %>
-            </td>
-            <td style="width: 10%;">
-                <%= item.memoryMaxCapacity %>
-            </td>
-            <td style="width: 10%;">
-                <%= item.connectivityLAN %>
-            </td>
-            <td style="width: 10%;">
-                <%= item.rating %> <li class="fa fa-star" style="color: gold"></li>
-            </td>
-            <td style="width: 10%;">
+            <td style="width: 10%">
                 <%= item.price %>
             </td>
             <td style="width: 5%">
-
                 <% include ../componentDetails/motherboardDetails.ejs %>
-
             </td>
             <td style="width: 5%">
                 <div class="choice" data-toggle="wizard-checkbox">
-                    <input class="messageCheckbox" type="checkbox" title="Add me" value="<%= item._id %>^<%= item.colType %>">
-                    <div class="icon">
+                    <input class="messageCheckbox" id="check<%= item._id %>" type="checkbox" title="Add me" value="<%= item._id %>^<%= item.colType %>">
+                    <label for="check<%= item._id %>">
                         <i class="fa fa-check-square-o"></i>
-                    </div>
+                    </label>
                 </div>
             </td>
         </tr>
-        <%})%>
+        <% }) %>
         </tbody>
     </table>
-    <table class="footer">
-        <div class="text-center">
-            <ul class="pagination pagination-lg pager" id="boardsPager"></ul>
-        </div>
-    </table>
+    <div class="text-center">
+        <ul class="pagination pagination-sm pager" id="boardsPager"></ul>
+    </div>
 </div>

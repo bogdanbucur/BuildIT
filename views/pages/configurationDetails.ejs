@@ -1,148 +1,157 @@
 <%- contentFor('body') %>
 <link rel="stylesheet" type="text/css" href="/stylesheets/specific/material-bootstrap-wizard.css">
-<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons"/>
-<link rel="stylesheet" type="text/css" href="/stylesheets/specific/materialKit.css">
-<link rel="stylesheet" type="text/css" href="/stylesheets/specific/materialDashboard.css">
 <link rel="stylesheet" type="text/css" href="/stylesheets/specific/carousel.css">
 
-<div class="main container">
-    <div class="image-container set-full-height">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="wizard-container">
-                        <div class="card wizard-card" data-color="purple" id="wizard" style="background: transparent; margin-top: -10%">
-                            <div class="wizard-header">
-                                <div class="alert alert-success">
-                                    <span class="pull-left"><%= buildArray[buildArray.findIndex(x => x.id === buildID)].name %></span>
-                                    <span class="text-primary">Total Rating</span>: <%= rating %>
-                                    <span class="text-primary">Total Value</span>: <%= value.toFixed(2) %> USD
-                                </div>
-
-
-                                <% if (Config.case !== null && Config.board !== null) { %>
-                                    <% if (!(Config.case.motherboardCompatibility.includes(Config.board.otherFormat))) { %>
-                                        <div class="alert alert-danger">
-                                            You need to change the Motherboard or the Computer Case. The formats don't match.
-                                        </div>
-                                    <% } %>
-                                <% } %>
-
-                                <% if (Config.cpu !== null && Config.board !== null) { %>
-                                    <% if (Config.cpu.socket !== Config.board.cpuSocket) { %>
-                                        <div class="alert alert-danger">
-                                            The Processor doesn't match with the motherboard. Choose a combination with a matching Socket.
-                                        </div>
-                                    <% } %>
-                                <% } %>
-
-                                <% if (Config.board !== null && Config.ram !== null) { %>
-                                <% if (Config.board.memoryType !== Config.ram.generalType) { %>
-                                <div class="alert alert-danger">
-                                    The Motherboard's Memory Type doesn't match with the RAM Memory's type.
-                                </div>
-                                <% } %>
-                                <% } %>
-
-                                <% Object.keys(Config).forEach(function (obj) { %>
-                                <% let item = Config[obj] %>
-                                <% if (item !== null) { %>
-                                <% if (parseFloat(rating) - parseFloat(item.rating) > 0.5) { %>
-                                    <div class="alert alert-info">
-                                        <%= item.name %>'s rating is lower than the Total rating with more than 0.5, you can go for a better one.
-                                    </div>
-                                <% } %>
-                                <% } %>
-                                <% }) %>
-
-                            </div>
-                            <% let fieldArray = [] %>
-                            <% Object.keys(Config).forEach(function (item) { %>
-                            <% let field = Config[item] %>
-                            <% if (field === null) { %>
-                            <% fieldArray.push(item) %>
-                            <% } %>
-                            <% }) %>
-                            <% if (fieldArray.length > 0) { %>
-                            <% console.log(fieldArray) %>
-                            <div class="col-sm-5 col-sm-offset-4" style="margin-top: 30px">
-                                <a href="/build/add-component?fields=<%= fieldArray %>^<%= buildID %>" style="margin-left: 13%">
-                                    <button type="button" class="btn btn-info btn-md" style="margin-top: 0">
-                                        Add missing components
-                                    </button>
-                                </a>
-                            </div>
-                            <% } %>
-                            <div class="container">
-                                <div class="row">
-                                    <%Object.keys(Config).forEach(function (obj) {%>
-                                    <% let item = Config[obj] %>
-                                    <% if(item !== null) {%>
-                                    <div class="col-sm-6">
-                                        <div class="card card-nav-tabs" style="background: transparent; margin: -3% 0 -3% -2.5%">
-                                            <div class="header" style="background-color: #ffffff">
-                                                <div class="nav-tabs-navigation">
-                                                    <div class="nav-tabs-wrapper">
-                                                        <ul class="nav nav-tabs" data-tabs="tabs">
-                                                            <div class="row">
-                                                                <div class="col-sm-3">
-                                                                    <li class="active">
-                                                                        <img src="<%= item.image0 %>" class="img-responsive" alt="" width="120" height="90">
-
-                                                                    </li>
-                                                                </div>
-                                                                <div class="col-sm-9">
-                                                                    <div class="row" style="width: 90%; margin: 0 auto; height: 50px">
-                                                                        <li style="margin-left: 10px; font-size: 10px" class="text-center">
-                                                                            <p style="font-size: 14px"><%= item.description %></p>
-                                                                        </li>
-                                                                    </div>
-                                                                    <div class="row"></div>
-                                                                    <div class="row">
-                                                                        <div class="col-sm-4">
-                                                                            <i class="fa fa-star fa-2x pull-right" aria-hidden="true" style="margin-top: 30px; color: gold"></i>
-                                                                            <p class="pull-right" style="margin-top: 30px; font-size: 20px"><%= item.rating %></p>
-                                                                        </div>
-                                                                        <div class="col-sm-8">
-
-                                                                            <% if (parseInt(item.colType) === 3) { %>
-                                                                            <% include ../partials/componentDetails/computerCaseDetails.ejs %>
-                                                                            <% } else if (parseInt(item.colType) === 4) { %>
-                                                                            <% include ../partials/componentDetails/graphicsBoardDetails.ejs %>
-                                                                            <% } else if (parseInt(item.colType) === 5) { %>
-                                                                            <% include ../partials/componentDetails/hardDrivesDetails.ejs %>
-                                                                            <% } else if (parseInt(item.colType) === 7) { %>
-                                                                            <% include ../partials/componentDetails/motherboardDetails.ejs %>
-                                                                            <% } else if (parseInt(item.colType) === 8) { %>
-                                                                            <% include ../partials/componentDetails/powerSupplyDetails.ejs %>
-                                                                            <% } else if (parseInt(item.colType) === 9) { %>
-                                                                            <% include ../partials/componentDetails/processorDetails.ejs %>
-                                                                            <% } else if (parseInt(item.colType) === 10) { %>
-                                                                            <% include ../partials/componentDetails/ramDetails.ejs %>
-                                                                            <% } else if (parseInt(item.colType) === 11) { %>
-                                                                            <% include ../partials/componentDetails/ssdDetails.ejs %>
-                                                                            <% } %>
-
-                                                                            <form action="/build/remove-component?id=<%= item._id %>^<%= buildID %>" method="post" class="pull-right">
-                                                                                <button type="submit" class="btn btn-danger btn-sm" style="">
-                                                                                    Remove
-                                                                                </button>
-                                                                            </form>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <% } %>
-                                    <%})%>
-                                </div>
-                            </div>
+<div class="main">
+    <div class="container-fluid">
+        <div class="card wizard-card" data-color="purple" id="wizard" style="background: transparent; width: 80%; margin: 0 auto">
+            <div class="wizard-container" style="padding-top: 0">
+                <div class="row" style="width: 90%; margin: 0 auto">
+                    <div class="col-sm-12">
+                        <% if (Config.case !== null && Config.board !== null) {
+                        if (!(Config.case.motherboardCompatibility.includes(Config.board.otherFormat))) { %>
+                        <div class="alert alert-danger text-center">
+                            You need to change the Motherboard or the Computer Case. The formats don't match.
                         </div>
+                        <% }
+                        } %>
+
+                        <% if (Config.cpu !== null && Config.board !== null) {
+                        if (Config.cpu.socket !== Config.board.cpuSocket) { %>
+                        <div class="alert alert-danger text-center">
+                            The Processor doesn't match with the motherboard. Choose a combination with a matching Socket.
+                        </div>
+                        <% }
+                        } %>
+
+                        <% if (Config.board !== null && Config.ram !== null) {
+                        if (Config.board.memoryType !== Config.ram.generalType) { %>
+                        <div class="alert alert-danger text-center">
+                            The Motherboard's Memory Type doesn't match with the RAM Memory's type.
+                        </div>
+                        <% }
+                        } %>
+
+                        <% Object.keys(Config).forEach(function (obj) { %>
+                        <% let item = Config[obj] %>
+                        <% if (item !== null) { %>
+                        <% if (parseFloat(rating) - parseFloat(item.rating) > 0.5) { %>
+                        <div class="alert alert-info text-center">
+                            <%= item.name %>'s rating is lower than the Total rating with more than 0.5, you can go for a better one.
+                        </div>
+                        <% } %>
+                        <% } %>
+                        <% }) %>
+
+                        <table class="table table-responsive" style="background: white">
+                            <thead>
+                            <tr style="background: purple">
+                                <th style="width: 5%"></th>
+                                <th class="text-center" style="color: white; width: 50%">
+                                    <% const build = buildArray.find(x => String(x.id) === buildID) %>
+                                    <%= build.name %>
+                                </th>
+                                <th class="text-center" style="color: white; width: 10%">
+                                    <%= rating %>
+                                    <i class="fa fa-star" style="color: gold"></i>
+                                </th>
+                                <th class="text-center" style="color: white; width: 15%">
+                                    <%= value.toFixed(2) %>
+                                    <i class="fa fa-dollar" style="color: greenyellow"></i>
+                                </th>
+                                <th style="width: 20%"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <% Object.keys(Config).forEach((comp) => {
+                                let item = Config[comp]
+                            if (item !== null) { %>
+                            <tr>
+                                <td class="text-center" style="width: 10%">
+                                    <img src="<%= item.image0 %>" width="96" height="96" alt="">
+                                </td>
+
+                                <td style="width: 50%">
+                                    <p class="title text-center">
+                                        <%= item.description %>
+                                    </p>
+                                </td>
+
+                                <td class="text-center" style="width: 10%">
+                                    <%= item.rating %>
+                                    <i class="fa fa-star" style="color: gold"></i>
+                                </td>
+
+                                <td class="text-center" style="width: 10%">
+                                    <%= item.price %>
+                                </td>
+
+                                <td class="text-center" style="width: 20%">
+                                    <form action="/build/remove-component?id=<%= item._id %>^<%= buildID %>" method="post"
+                                          class="pull-right">
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="fa fa-remove"></i>
+                                        </button>
+                                    </form>
+
+                                    <% switch (parseInt(item.colType)) {
+                                    case 3: %>
+                                    <% include ../partials/componentDetails/computerCaseDetails.ejs %>
+                                    <% break
+
+                                    case 4: %>
+                                    <% include ../partials/componentDetails/graphicsBoardDetails.ejs %>
+                                    <% break
+
+                                    case 5: %>
+                                    <% include ../partials/componentDetails/hardDrivesDetails.ejs %>
+                                    <% break
+
+                                    case 7: %>
+                                    <% include ../partials/componentDetails/motherboardDetails.ejs %>
+                                    <% break
+
+                                    case 8: %>
+                                    <% include ../partials/componentDetails/powerSupplyDetails.ejs %>
+                                    <% break
+
+                                    case 9: %>
+                                    <% include ../partials/componentDetails/processorDetails.ejs %>
+                                    <% break
+
+                                    case 10: %>
+                                    <% include ../partials/componentDetails/ramDetails.ejs %>
+                                    <% break
+
+                                    case 11: %>
+                                    <% include ../partials/componentDetails/ssdDetails.ejs %>
+                                    <% break
+                                    } %>
+
+                                </td>
+                            </tr>
+                            <% }
+                            }) %>
+                            </tbody>
+                        </table>
+
+                        <% let fieldArray = []
+                        Object.keys(Config).forEach(function (item) {
+                            let field = Config[item]
+                            if (field === null) {
+                                fieldArray.push(item)
+                            }
+                        })
+                        if (fieldArray.length > 0) { %>
+                        <div class="col-sm-5 col-sm-offset-4" style="margin-top: 30px">
+                            <a href="/build/add-component?fields=<%= fieldArray %>^<%= buildID %>" style="margin-left: 13%">
+                                <button type="button" class="btn btn-info btn-md" style="margin-top: 0">
+                                    Add missing components
+                                </button>
+                            </a>
+                        </div>
+                        <% } %>
+
                     </div>
                 </div>
             </div>

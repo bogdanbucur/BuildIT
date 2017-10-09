@@ -15,7 +15,7 @@
         </tr>
         </thead>
         <tbody class="searchable3" id="gpuTable">
-        <%gpuArray.forEach(function(item) {%>
+        <% gpuArray.forEach(function(item) { %>
         <tr>
             <th scope="row" style="width: 10%">
                 <img src="<%= item.image0 %>" alt="" height="64" width="64">
@@ -39,15 +39,14 @@
                 <%= item.coolingType %>
             </td>
             <td style="width: 10%">
-                <%= item.rating %> <li class="fa fa-star" style="color: gold"></li>
+                <%= item.rating %>
+                <li class="fa fa-star" style="color: gold"></li>
             </td>
             <td style="width: 10%">
                 <%= item.price %>
             </td>
             <td style="width: 5%">
-
                 <% include ../componentDetails/graphicsBoardDetails.ejs %>
-
             </td>
             <td style="width: 5%">
                 <div class="choice" data-toggle="wizard-checkbox">
@@ -58,12 +57,10 @@
                 </div>
             </td>
         </tr>
-        <%})%>
+        <% }) %>
         </tbody>
     </table>
-    <table class="footer">
-        <div class="text-center">
-            <ul class="pagination pagination-lg pager" id="gpuPager"></ul>
-        </div>
-    </table>
+    <div class="text-center">
+        <ul class="pagination pagination-sm pager" id="gpuPager"></ul>
+    </div>
 </div>
